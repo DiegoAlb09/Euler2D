@@ -29,7 +29,8 @@ def process_topology_case(case_name, size=None, seed=42):
     if size is None:
         size = IMAGE_CONFIG['default_size']
     
-    print(f"Procesando caso: {case_name}")
+    print(f"\nProcesando caso: {case_name}")
+    print("=" * 50)
     
     # Generar campo con topología específica
     field = generate_topology_case(case_name, size, seed)
@@ -56,13 +57,53 @@ def process_topology_case(case_name, size=None, seed=42):
         'seed': seed
     }
     
-    # Mostrar métricas principales
-    print(f"  β₀ = {metrics['beta0']}, β₁ = {metrics['beta1']}")
+    # Mostrar métricas principales y conclusiones
+    print("\nMétricas Principales:")
+    print(f"  β₀ (Componentes) = {metrics['beta0']}")
+    print(f"  β₁ (Agujeros) = {metrics['beta1']}")
     print(f"  χ (V-E+F) = {metrics['euler_vef']}")
     print(f"  χ (β₀-β₁) = {metrics['euler_poincare']}")
-    print(f"  Consistente: {'Sí' if metrics['is_consistent'] else 'No'}")
-    print(f"  Validación: {'✓' if validation else '✗'}")
-    print()
+    
+    # Mostrar códigos generados
+    print("\nCódigos Topológicos:")
+    print(f"  VCC: {metrics['vcc']['code_string']}")
+    print(f"  3OT: {metrics['3ot']['code_string']}")
+    
+    # Mostrar conclusiones
+    print("\nConclusiones del Análisis:")
+    
+    # 1. Validación de fórmulas de Euler
+    if metrics['is_consistent']:
+        print("✓ Las fórmulas de Euler son consistentes:")
+        print(f"  V-E+F = β₀-β₁ = {metrics['euler_poincare']}")
+    else:
+        print("✗ Inconsistencia en las fórmulas de Euler:")
+        print(f"  V-E+F = {metrics['euler_vef']} ≠ β₀-β₁ = {metrics['euler_poincare']}")
+    
+    # 2. Validación de VCC
+    vcc = metrics['vcc']
+    if vcc['is_consistent']:
+        print("✓ El código VCC coincide con Euler-Poincaré:")
+        print(f"  VCC(x) = {vcc['x']:.2f} ≈ χ = {metrics['euler_poincare']}")
+    else:
+        print("✗ Discrepancia entre VCC y Euler-Poincaré:")
+        print(f"  VCC(x) = {vcc['x']:.2f} ≠ χ = {metrics['euler_poincare']}")
+    
+    # 3. Análisis 3OT
+    ot3 = metrics['3ot']
+    print("\nAnálisis direccional (3OT):")
+    print(f"  Horizontal (N2h): {ot3['N2h']} segmentos")
+    print(f"  Vertical (N2v): {ot3['N2v']} segmentos")
+    print(f"  Diagonal (N2d): {ot3['N2d']} segmentos")
+    print(f"  X = (N2h - N2v)/4 = {ot3['combined']['X_value']:.2f}")
+    
+    # 4. Validación con caso esperado
+    if validation:
+        print("\n✓ La topología coincide con lo esperado")
+    else:
+        print("\n✗ La topología no coincide con lo esperado")
+    
+    print("\n" + "-" * 50)
     
     return result
 

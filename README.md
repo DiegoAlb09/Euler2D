@@ -128,17 +128,19 @@ output/
 ## 📈 Tipos de Visualización
 
 ### 1. Análisis Individual Completo
-Cada caso genera una visualización de 4 paneles:
+Cada caso genera una visualización de 6 paneles:
 - **Panel Superior Izquierdo**: Topología original con métricas β₀ y β₁
 - **Panel Superior Derecho**: Campo vectorial superpuesto
-- **Panel Superior Derecho**: Comparación de fórmulas de Euler
-- **Panel Inferior**: Tabla completa de métricas
+- **Panel Central Izquierdo**: Comparación de fórmulas de Euler y VCC
+- **Panel Central Derecho**: Análisis detallado de VCC (N1, N3)
+- **Panel Inferior**: Análisis 3OT con distribución direccional
+- **Panel Final**: Tabla completa de métricas y códigos generados
 
 ### 2. Comparación Multi-Caso
 Gráfico de 4 paneles comparando todos los casos:
 - **Números de Betti**: Barras comparativas de β₀ y β₁
-- **Característica de Euler**: Valores de χ por caso
-- **Consistencia**: Estado de validación de fórmulas
+- **Característica de Euler y VCC**: Valores de χ y x por caso
+- **Análisis 3OT**: Distribución direccional por caso
 - **Mapa de Calor**: Visualización matricial de todas las métricas
 
 ### 3. Campo Vectorial Detallado
@@ -146,11 +148,53 @@ Visualización dual del campo vectorial:
 - Campo direccional superpuesto a la topología
 - Mapa de magnitud del campo vectorial
 
+### 4. Análisis de Códigos Topológicos
+Visualización específica de códigos:
+- **Panel VCC**: 
+  * Distribución de vértices por tipo de conexión
+  * Comparación x vs χ
+  * Código binario generado
+- **Panel 3OT**:
+  * Distribución de segmentos por dirección
+  * Longitudes medias y máximas
+  * Rosas de dirección
+  * Código binario generado
+
 ## 🧮 Fundamentos Matemáticos
 
 ### Números de Betti
 - **β₀**: Número de componentes conectados
 - **β₁**: Número de agujeros topológicos (genus)
+
+### Códigos Topológicos
+
+#### 1. VCC (Vertex Correction Code)
+- **Definición**: Código basado en el análisis de vértices y sus conexiones
+- **Componentes principales**:
+  - N1: Número de vértices con una conexión
+  - N3: Número de vértices con tres conexiones
+  - x = (N1 - N3)/4: Valor de corrección que debe coincidir con χ
+- **Validación**: El valor x debe ser igual a la característica de Euler (χ)
+- **Aplicaciones**: 
+  - Verificación de consistencia topológica
+  - Detección de anomalías en la conectividad
+  - Análisis de estructura local
+
+#### 2. 3OT (Three Orthogonal Topology)
+- **Definición**: Análisis basado en segmentos en tres direcciones principales
+- **Componentes**:
+  - N2h: Número de segmentos horizontales
+  - N2v: Número de segmentos verticales
+  - N2d: Número de segmentos diagonales
+  - X = (N2h - N2v)/4: Valor que caracteriza la orientación predominante
+- **Métricas adicionales**:
+  - Longitud media y máxima por dirección
+  - Ratio direccional
+  - Distribución de longitudes
+- **Aplicaciones**:
+  - Análisis de orientación preferencial
+  - Caracterización de anisotropía
+  - Estudio de patrones direccionales
 
 ### Fórmulas de Euler
 1. **Clásica**: χ = V - E + F
@@ -226,6 +270,49 @@ Números de Betti:
 Características de Euler:
   χ = V - E + F = 12847 - 25693 + 12847 = 1
   χ = β₀ - β₁ = 1 - 0 = 1
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 4
+  N3 (vértices con tres conexiones): 0
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 1000
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 12
+  N2v (segmentos verticales): 8
+  N2d (segmentos diagonales): 6
+  X = (N2h - N2v)/4: 1.00
+  Código binario: 1100
+
+  Dirección Horizontal:
+    Número de segmentos: 12
+    Longitud media: 8.50
+    Longitud máxima: 15
+    Distribución de longitudes: 5, 8, 10, 12, 15
+
+  Dirección Vertical:
+    Número de segmentos: 8
+    Longitud media: 7.25
+    Longitud máxima: 12
+    Distribución de longitudes: 4, 7, 9, 12
+
+  Dirección Diagonal:
+    Número de segmentos: 6
+    Longitud media: 5.33
+    Longitud máxima: 8
+    Distribución de longitudes: 3, 5, 8
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 26
+    Longitud media global: 7.27
+    Longitud máxima global: 15
+    Ratio direccional: 1.50
 
 Consistencia: ✓
 Fracción de área: 0.1962
@@ -332,3 +419,171 @@ Perímetro: 1847
    - β₀ = 1 (una pieza)
    - β₁ = 2 (dos agujeros)
    - V - E + F = -1
+
+## 🔄 Funcionamiento del Proyecto
+
+### Flujo de Ejecución
+
+1. **Inicialización**
+   ```python
+   # En main.py
+   output_dir = "output"
+   image_size = IMAGE_CONFIG['default_size']
+   seed = 42  # Para reproducibilidad
+   ```
+
+2. **Carga de Casos**
+   ```python
+   # Obtener casos definidos en topology_config.py
+   topology_cases = get_topology_cases()
+   case_names = list(topology_cases.keys())
+   ```
+
+3. **Procesamiento por Caso**
+   ```python
+   for case_name in case_names:
+       result = process_topology_case(case_name, image_size, seed)
+   ```
+
+### Funciones Principales
+
+#### 1. Generación de Topología
+```python
+def generate_topology_case(case_name, size=(256, 256), seed=None):
+    """
+    Genera un caso específico de topología.
+    
+    Casos disponibles:
+    - single_blob: Un blob simple
+    - blob_with_hole: Blob con un agujero
+    - blob_with_three_holes: Blob con tres agujeros
+    - two_blobs: Dos blobs separados
+    - two_blobs_one_hole: Dos blobs, uno con agujero
+    - complex_topology: Topología compleja
+    """
+```
+
+#### 2. Cálculo de Métricas
+```python
+def compute_all_metrics(binary_image):
+    """
+    Calcula todas las métricas topológicas:
+    - Números de Betti (β₀, β₁)
+    - Vértices, Aristas, Caras
+    - Características de Euler
+    - Área y perímetro
+    """
+```
+
+#### 3. Análisis de Conectividad
+```python
+def analyze_connectivity(binary_image):
+    """
+    Analiza propiedades de conectividad:
+    - Número de componentes
+    - Tamaño de componentes
+    - Agujeros por componente
+    - Distribución espacial
+    """
+```
+
+### Proceso Detallado de Análisis
+
+1. **Generación de Campo**
+   - Creación de blobs y agujeros
+   - Posicionamiento seguro de elementos
+   - Validación de geometría
+
+2. **Análisis Topológico**
+   - Cálculo de números de Betti
+   - Conteo de elementos discretos (V,E,F)
+   - Validación de fórmulas de Euler
+
+3. **Visualización**
+   - Generación de campos vectoriales
+   - Creación de gráficos comparativos
+   - Exportación de resultados
+
+### Funciones de Visualización
+
+#### 1. Análisis Individual
+```python
+def plot_topology_analysis(field, u, v, metrics, save_path, case_name=""):
+    """
+    Crea visualización completa con:
+    - Campo escalar
+    - Campo vectorial
+    - Métricas topológicas
+    - Comparación de fórmulas
+    """
+```
+
+#### 2. Comparación Multi-caso
+```python
+def create_comparison_plot(cases_data, save_path):
+    """
+    Genera gráficos comparativos:
+    - Números de Betti
+    - Características de Euler
+    - Consistencia de fórmulas
+    - Mapa de calor de métricas
+    """
+```
+
+### Generación de Reportes
+
+1. **Métricas CSV**
+```python
+def save_metrics_to_csv(cases_data, save_path):
+    """
+    Exporta métricas detalladas:
+    - Métricas por caso
+    - Valores numéricos
+    - Estadísticas comparativas
+    """
+```
+
+2. **Reporte de Texto**
+```python
+def create_summary_report(cases_data, save_path):
+    """
+    Genera reporte detallado:
+    - Análisis por caso
+    - Validación de fórmulas
+    - Estadísticas globales
+    """
+```
+
+### Validación y Control de Calidad
+
+1. **Validación de Casos**
+```python
+def validate_case_topology(case_name, calculated_metrics):
+    """
+    Verifica que las métricas coincidan
+    con los valores esperados para cada caso
+    """
+```
+
+2. **Consistencia de Euler**
+```python
+def validate_euler_formulas(binary_image, tolerance=0):
+    """
+    Compara las dos formulaciones de Euler
+    y valida su consistencia
+    """
+```
+
+### Configuración y Personalización
+
+Los parámetros clave se pueden ajustar en `config/topology_config.py`:
+
+1. **Parámetros de Generación**
+   - Tamaños de blob y agujeros
+   - Distancias mínimas
+   - Parámetros de suavizado
+
+2. **Parámetros de Visualización**
+   - Resolución de imágenes
+   - Configuración de campos vectoriales
+   - Estilos de gráficos

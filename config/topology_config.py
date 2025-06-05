@@ -62,5 +62,35 @@ TOPOLOGY_CASES = {
         'expected_beta0': 3,
         'expected_beta1': 2,
         'expected_euler': 1
+    },
+    'irregular_star': {
+        'description': 'Forma de estrella irregular con agujeros',
+        'expected_beta0': 1,
+        'expected_beta1': 4,
+        'expected_euler': -3
+    },
+    'irregular_chain': {
+        'description': 'Cadena de blobs irregulares conectados',
+        'expected_beta0': 1,
+        'expected_beta1': 3,
+        'expected_euler': -2
+    },
+    'irregular_mesh': {
+        'description': 'Malla irregular con múltiples agujeros',
+        'expected_beta0': 1,
+        'expected_beta1': 6,
+        'expected_euler': -5
+    },
+    'irregular_clusters': {
+        'description': 'Clusters irregulares con conexiones',
+        'expected_beta0': 3,
+        'expected_beta1': 4,
+        'expected_euler': -1
+    },
+    'spiral_holes': {
+        'description': 'Espiral con agujeros distribuidos',
+        'expected_beta0': 1,
+        'expected_beta1': 5,
+        'expected_euler': -4
     }
 }

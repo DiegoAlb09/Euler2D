@@ -33,6 +33,16 @@ def generate_topology_case(case_name, size=(256, 256), seed=None):
         return create_two_blobs_one_with_hole(size)
     elif case_name == 'complex_topology':
         return create_complex_topology(size)
+    elif case_name == 'irregular_star':
+        return create_irregular_star(size)
+    elif case_name == 'irregular_chain':
+        return create_irregular_chain(size)
+    elif case_name == 'irregular_mesh':
+        return create_irregular_mesh(size)
+    elif case_name == 'irregular_clusters':
+        return create_irregular_clusters(size)
+    elif case_name == 'spiral_holes':
+        return create_spiral_holes(size)
     else:
         raise ValueError(f"Caso desconocido: {case_name}")
 
@@ -241,6 +251,206 @@ def create_complex_topology(size):
     field = (field > 0.5).astype(float)
     
     return field
+
+def create_irregular_star(size):
+    """Crea una forma de estrella irregular con agujeros"""
+    center_x = size[1] // 2
+    center_y = size[0] // 2
+    radius = min(size) // 4
+    
+    # Crear puntas irregulares
+    field = np.zeros(size)
+    num_points = 7  # Número impar para asimetría
+    
+    for i in range(num_points):
+        angle = 2 * np.pi * i / num_points
+        length = radius * (1 + 0.5 * np.random.random())
+        width = radius * 0.3 * (1 + 0.5 * np.random.random())
+        
+        end_x = int(center_x + length * np.cos(angle))
+        end_y = int(center_y + length * np.sin(angle))
+        
+        # Crear punta irregular
+        blob = create_blob((end_x, end_y), width, size, smooth=True)
+        field = np.maximum(field, blob)
+    
+    # Añadir agujeros irregulares
+    for i in range(4):
+        angle = 2 * np.pi * (i + 0.5) / 4
+        dist = radius * 0.6
+        hole_x = int(center_x + dist * np.cos(angle))
+        hole_y = int(center_y + dist * np.sin(angle))
+        
+        hole_radius = radius * 0.2 * (1 + 0.3 * np.random.random())
+        hole = create_hole((hole_x, hole_y), hole_radius, size)
+        field = field * (1 - hole)
+    
+    return (field > 0.5).astype(float)
+
+def create_irregular_chain(size):
+    """Crea una cadena de blobs irregulares conectados"""
+    field = np.zeros(size)
+    num_blobs = 5
+    base_radius = min(size) // 12
+    
+    # Crear camino serpenteante
+    x = size[1] // 4
+    y = size[0] // 2
+    for i in range(num_blobs):
+        # Blob principal
+        radius = base_radius * (1 + 0.3 * np.random.random())
+        blob = create_blob((x, y), radius, size, smooth=True)
+        field = np.maximum(field, blob)
+        
+        # Conexión al siguiente blob
+        if i < num_blobs - 1:
+            next_x = x + base_radius * 2 * (1 + 0.2 * np.random.random())
+            next_y = y + base_radius * (np.random.random() - 0.5)
+            
+            # Crear conexión
+            connection = create_blob(((x + next_x)//2, (y + next_y)//2), 
+                                   base_radius * 0.5, size, smooth=True)
+            field = np.maximum(field, connection)
+            
+            x, y = next_x, next_y
+    
+    # Añadir agujeros
+    for _ in range(3):
+        hole_x = np.random.randint(size[1]//4, 3*size[1]//4)
+        hole_y = np.random.randint(size[0]//3, 2*size[0]//3)
+        hole_radius = base_radius * 0.6
+        hole = create_hole((hole_x, hole_y), hole_radius, size)
+        field = field * (1 - hole)
+    
+    return (field > 0.5).astype(float)
+
+def create_irregular_mesh(size):
+    """Crea una malla irregular con múltiples agujeros"""
+    field = np.zeros(size)
+    base_radius = min(size) // 16
+    
+    # Crear grid irregular de puntos
+    points = []
+    for i in range(4):
+        for j in range(4):
+            x = size[1]//5 + (size[1]*3//5) * i//3 + np.random.randint(-base_radius, base_radius)
+            y = size[0]//5 + (size[0]*3//5) * j//3 + np.random.randint(-base_radius, base_radius)
+            points.append((x, y))
+    
+    # Conectar puntos
+    for i, (x1, y1) in enumerate(points):
+        for j, (x2, y2) in enumerate(points[i+1:], i+1):
+            if np.random.random() < 0.4:  # 40% de probabilidad de conexión
+                mid_x = (x1 + x2) // 2
+                mid_y = (y1 + y2) // 2
+                
+                # Crear conexión irregular
+                connection = create_blob((mid_x, mid_y), base_radius, size, smooth=True)
+                field = np.maximum(field, connection)
+    
+    # Añadir nodos en las intersecciones
+    for x, y in points:
+        node = create_blob((x, y), base_radius * 1.2, size, smooth=True)
+        field = np.maximum(field, node)
+    
+    # Añadir agujeros en espacios vacíos
+    for _ in range(6):
+        hole_x = np.random.randint(size[1]//4, 3*size[1]//4)
+        hole_y = np.random.randint(size[0]//4, 3*size[0]//4)
+        
+        if field[hole_y, hole_x] > 0.5:  # Si hay material
+            hole_radius = base_radius * 1.5
+            hole = create_hole((hole_x, hole_y), hole_radius, size)
+            field = field * (1 - hole)
+    
+    return (field > 0.5).astype(float)
+
+def create_irregular_clusters(size):
+    """Crea clusters irregulares con conexiones"""
+    field = np.zeros(size)
+    base_radius = min(size) // 10
+    
+    # Crear tres clusters principales
+    cluster_centers = [
+        (size[1]//4, size[0]//4),
+        (3*size[1]//4, size[0]//4),
+        (size[1]//2, 3*size[0]//4)
+    ]
+    
+    # Generar cada cluster
+    for cx, cy in cluster_centers:
+        # Blob principal del cluster
+        main_blob = create_blob((cx, cy), base_radius * 1.5, size, smooth=True)
+        field = np.maximum(field, main_blob)
+        
+        # Añadir blobs satélite
+        for _ in range(3):
+            angle = 2 * np.pi * np.random.random()
+            dist = base_radius * (1 + 0.5 * np.random.random())
+            x = int(cx + dist * np.cos(angle))
+            y = int(cy + dist * np.sin(angle))
+            
+            satellite = create_blob((x, y), base_radius * 0.7, size, smooth=True)
+            field = np.maximum(field, satellite)
+    
+    # Añadir conexiones entre clusters
+    for i, (x1, y1) in enumerate(cluster_centers):
+        for x2, y2 in cluster_centers[i+1:]:
+            if np.random.random() < 0.5:  # 50% de probabilidad de conexión
+                connection = create_blob(((x1+x2)//2, (y1+y2)//2), 
+                                      base_radius * 0.4, size, smooth=True)
+                field = np.maximum(field, connection)
+    
+    # Añadir agujeros
+    for _ in range(4):
+        hole_x = np.random.randint(size[1]//4, 3*size[1]//4)
+        hole_y = np.random.randint(size[0]//4, 3*size[0]//4)
+        
+        if field[hole_y, hole_x] > 0.5:
+            hole_radius = base_radius * 0.8
+            hole = create_hole((hole_x, hole_y), hole_radius, size)
+            field = field * (1 - hole)
+    
+    return (field > 0.5).astype(float)
+
+def create_spiral_holes(size):
+    """Crea una espiral con agujeros distribuidos"""
+    field = np.zeros(size)
+    center_x = size[1] // 2
+    center_y = size[0] // 2
+    max_radius = min(size) // 3
+    
+    # Crear espiral
+    theta = np.linspace(0, 6*np.pi, 200)
+    r = np.linspace(max_radius * 0.2, max_radius, len(theta))
+    
+    # Generar puntos de la espiral
+    points = []
+    for t, rad in zip(theta, r):
+        x = int(center_x + rad * np.cos(t))
+        y = int(center_y + rad * np.sin(t))
+        points.append((x, y))
+    
+    # Crear la espiral con blobs conectados
+    base_radius = max_radius * 0.15
+    for i, (x, y) in enumerate(points):
+        if i % 5 == 0:  # Reducir densidad de puntos
+            blob = create_blob((x, y), base_radius, size, smooth=True)
+            field = np.maximum(field, blob)
+    
+    # Añadir agujeros siguiendo un patrón espiral interno
+    hole_theta = np.linspace(0, 4*np.pi, 5)
+    hole_r = np.linspace(max_radius * 0.3, max_radius * 0.8, len(hole_theta))
+    
+    for t, rad in zip(hole_theta, hole_r):
+        x = int(center_x + rad * np.cos(t))
+        y = int(center_y + rad * np.sin(t))
+        
+        hole_radius = base_radius * 1.2
+        hole = create_hole((x, y), hole_radius, size)
+        field = field * (1 - hole)
+    
+    return (field > 0.5).astype(float)
 
 def generate_vector_field(field):
     """

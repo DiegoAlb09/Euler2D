@@ -11,9 +11,48 @@ Características de Euler:
   χ = V - E + F = 13112 - 25964 + 12853 = 1
   χ = β₀ - β₁ = 1 - 0 = 1
 
-Consistencia: ✓
-Fracción de área: 0.1961
-Perímetro: 360
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 156
+  N3 (vértices con tres conexiones): 152
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 1001110010011000
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 1
+  N2d (segmentos diagonales): 1
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000010000000100000001
+
+  Dirección Horizontal:
+    Número de segmentos: 1
+    Longitud media: 12853.00
+    Longitud máxima: 12853
+    Distribución de longitudes: 12853
+
+  Dirección Vertical:
+    Número de segmentos: 1
+    Longitud media: 12853.00
+    Longitud máxima: 12853
+    Distribución de longitudes: 12853
+
+  Dirección Diagonal:
+    Número de segmentos: 1
+    Longitud media: 12866.00
+    Longitud máxima: 12866
+    Distribución de longitudes: 12866
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 3
+    Longitud media global: 12857.33
+    Longitud máxima global: 12866
+    Ratio direccional: 1.00
 
 ==================================================
 
@@ -27,9 +66,48 @@ Características de Euler:
   χ = V - E + F = 24648 - 48880 + 24232 = 0
   χ = β₀ - β₁ = 1 - 1 = 0
 
-Consistencia: ✓
-Fracción de área: 0.3698
-Perímetro: 580
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 252
+  N3 (vértices con tres conexiones): 252
+  N1 - N3: 0
+  x = (N1 - N3)/4: 0.00
+  Código binario: 1111110011111100
+  Verificación con Euler-Poincaré:
+    VCC (x): 0.00
+    E-P (β₀-β₁): 0
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 1
+  N2d (segmentos diagonales): 1
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000010000000100000001
+
+  Dirección Horizontal:
+    Número de segmentos: 1
+    Longitud media: 24232.00
+    Longitud máxima: 24232
+    Distribución de longitudes: 24232
+
+  Dirección Vertical:
+    Número de segmentos: 1
+    Longitud media: 24232.00
+    Longitud máxima: 24232
+    Distribución de longitudes: 24232
+
+  Dirección Diagonal:
+    Número de segmentos: 1
+    Longitud media: 24230.00
+    Longitud máxima: 24230
+    Distribución de longitudes: 24230
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 3
+    Longitud media global: 24231.33
+    Longitud máxima global: 24232
+    Ratio direccional: 1.00
 
 ==================================================
 
@@ -43,9 +121,48 @@ Características de Euler:
   χ = V - E + F = 23523 - 46524 + 22999 = -2
   χ = β₀ - β₁ = 1 - 3 = -2
 
-Consistencia: ✓
-Fracción de área: 0.3509
-Perímetro: 742
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 310
+  N3 (vértices con tres conexiones): 318
+  N1 - N3: -8
+  x = (N1 - N3)/4: -2.00
+  Código binario: 100110110100111110
+  Verificación con Euler-Poincaré:
+    VCC (x): -2.00
+    E-P (β₀-β₁): -2
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 1
+  N2d (segmentos diagonales): 1
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000010000000100000001
+
+  Dirección Horizontal:
+    Número de segmentos: 1
+    Longitud media: 22999.00
+    Longitud máxima: 22999
+    Distribución de longitudes: 22999
+
+  Dirección Vertical:
+    Número de segmentos: 1
+    Longitud media: 22999.00
+    Longitud máxima: 22999
+    Distribución de longitudes: 22999
+
+  Dirección Diagonal:
+    Número de segmentos: 1
+    Longitud media: 22997.00
+    Longitud máxima: 22997
+    Distribución de longitudes: 22997
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 3
+    Longitud media global: 22998.33
+    Longitud máxima global: 22999
+    Ratio direccional: 1.00
 
 ==================================================
 
@@ -59,9 +176,48 @@ Características de Euler:
   χ = V - E + F = 8400 - 16504 + 8106 = 2
   χ = β₀ - β₁ = 2 - 0 = 2
 
-Consistencia: ✓
-Fracción de área: 0.1237
-Perímetro: 400
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 184
+  N3 (vértices con tres conexiones): 176
+  N1 - N3: 8
+  x = (N1 - N3)/4: 2.00
+  Código binario: 1011100010110000
+  Verificación con Euler-Poincaré:
+    VCC (x): 2.00
+    E-P (β₀-β₁): 2
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 2
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000100000001000000010
+
+  Dirección Horizontal:
+    Número de segmentos: 2
+    Longitud media: 4053.00
+    Longitud máxima: 4053
+    Distribución de longitudes: 4053, 4053
+
+  Dirección Vertical:
+    Número de segmentos: 2
+    Longitud media: 4053.00
+    Longitud máxima: 4053
+    Distribución de longitudes: 4053, 4053
+
+  Dirección Diagonal:
+    Número de segmentos: 2
+    Longitud media: 4048.00
+    Longitud máxima: 4050
+    Distribución de longitudes: 4050, 4046
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 6
+    Longitud media global: 4051.33
+    Longitud máxima global: 4053
+    Ratio direccional: 1.00
 
 ==================================================
 
@@ -75,9 +231,48 @@ Características de Euler:
   χ = V - E + F = 11116 - 21848 + 10733 = 1
   χ = β₀ - β₁ = 2 - 1 = 1
 
-Consistencia: ✓
-Fracción de área: 0.1638
-Perímetro: 532
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 232
+  N3 (vértices con tres conexiones): 228
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 1110100011100100
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 2
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000100000001000000010
+
+  Dirección Horizontal:
+    Número de segmentos: 2
+    Longitud media: 5366.50
+    Longitud máxima: 5525
+    Distribución de longitudes: 5525, 5208
+
+  Dirección Vertical:
+    Número de segmentos: 2
+    Longitud media: 5366.50
+    Longitud máxima: 5525
+    Distribución de longitudes: 5525, 5208
+
+  Dirección Diagonal:
+    Número de segmentos: 2
+    Longitud media: 5362.00
+    Longitud máxima: 5526
+    Distribución de longitudes: 5198, 5526
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 6
+    Longitud media global: 5365.00
+    Longitud máxima global: 5526
+    Ratio direccional: 1.00
 
 ==================================================
 
@@ -91,9 +286,323 @@ Características de Euler:
   χ = V - E + F = 9692 - 18924 + 9233 = 1
   χ = β₀ - β₁ = 3 - 2 = 1
 
-Consistencia: ✓
-Fracción de área: 0.1409
-Perímetro: 636
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 280
+  N3 (vértices con tres conexiones): 276
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 100011000100010100
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 3
+  N2v (segmentos verticales): 3
+  N2d (segmentos diagonales): 3
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000110000001100000011
+
+  Dirección Horizontal:
+    Número de segmentos: 3
+    Longitud media: 3077.67
+    Longitud máxima: 3209
+    Distribución de longitudes: 3209, 3012, 3012
+
+  Dirección Vertical:
+    Número de segmentos: 3
+    Longitud media: 3077.67
+    Longitud máxima: 3209
+    Distribución de longitudes: 3012, 3209, 3012
+
+  Dirección Diagonal:
+    Número de segmentos: 3
+    Longitud media: 3079.00
+    Longitud máxima: 3211
+    Distribución de longitudes: 3211, 3018, 3008
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 9
+    Longitud media global: 3078.11
+    Longitud máxima global: 3211
+    Ratio direccional: 1.00
+
+==================================================
+
+CASO: irregular_star
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 7
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 15894 - 31036 + 15149 = 7
+  χ = β₀ - β₁ = 7 - 0 = 7
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 454
+  N3 (vértices con tres conexiones): 426
+  N1 - N3: 28
+  x = (N1 - N3)/4: 7.00
+  Código binario: 111000110110101010
+  Verificación con Euler-Poincaré:
+    VCC (x): 7.00
+    E-P (β₀-β₁): 7
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 7
+  N2v (segmentos verticales): 7
+  N2d (segmentos diagonales): 7
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000001110000011100000111
+
+  Dirección Horizontal:
+    Número de segmentos: 7
+    Longitud media: 2164.14
+    Longitud máxima: 2709
+    Distribución de longitudes: 2667, 1557, 2273, 2709, 2369, 2093, 1481
+
+  Dirección Vertical:
+    Número de segmentos: 7
+    Longitud media: 2164.14
+    Longitud máxima: 2709
+    Distribución de longitudes: 2273, 2369, 2667, 1481, 2093, 1557, 2709
+
+  Dirección Diagonal:
+    Número de segmentos: 7
+    Longitud media: 2164.43
+    Longitud máxima: 2714
+    Distribución de longitudes: 1552, 2714, 2670, 2091, 2273, 2376, 1475
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 21
+    Longitud media global: 2164.24
+    Longitud máxima global: 2714
+    Ratio direccional: 1.00
+
+==================================================
+
+CASO: irregular_chain
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 1
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 8681 - 16957 + 8277 = 1
+  χ = β₀ - β₁ = 1 - 0 = 1
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 231
+  N3 (vértices con tres conexiones): 227
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 1110011111100011
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 1
+  N2d (segmentos diagonales): 1
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000010000000100000001
+
+  Dirección Horizontal:
+    Número de segmentos: 1
+    Longitud media: 8277.00
+    Longitud máxima: 8277
+    Distribución de longitudes: 8277
+
+  Dirección Vertical:
+    Número de segmentos: 1
+    Longitud media: 8277.00
+    Longitud máxima: 8277
+    Distribución de longitudes: 8277
+
+  Dirección Diagonal:
+    Número de segmentos: 1
+    Longitud media: 8304.00
+    Longitud máxima: 8304
+    Distribución de longitudes: 8304
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 3
+    Longitud media global: 8286.00
+    Longitud máxima global: 8304
+    Ratio direccional: 1.00
+
+==================================================
+
+CASO: irregular_mesh
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 2
+  β₁ (Agujeros topológicos): 5
+
+Características de Euler:
+  χ = V - E + F = 27595 - 54230 + 26632 = -3
+  χ = β₀ - β₁ = 2 - 5 = -3
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 599
+  N3 (vértices con tres conexiones): 607
+  N1 - N3: -8
+  x = (N1 - N3)/4: -2.00
+  Código binario: 10010101111001011111
+  Verificación con Euler-Poincaré:
+    VCC (x): -2.00
+    E-P (β₀-β₁): -3
+    Diferencia: 1.000000
+    Consistencia: ✗
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 2
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000100000001000000010
+
+  Dirección Horizontal:
+    Número de segmentos: 2
+    Longitud media: 13316.00
+    Longitud máxima: 25713
+    Distribución de longitudes: 25713, 919
+
+  Dirección Vertical:
+    Número de segmentos: 2
+    Longitud media: 13316.00
+    Longitud máxima: 25713
+    Distribución de longitudes: 25713, 919
+
+  Dirección Diagonal:
+    Número de segmentos: 2
+    Longitud media: 13313.00
+    Longitud máxima: 25710
+    Distribución de longitudes: 25710, 916
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 6
+    Longitud media global: 13315.00
+    Longitud máxima global: 25713
+    Ratio direccional: 1.00
+
+==================================================
+
+CASO: irregular_clusters
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 5
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 17142 - 33617 + 16480 = 5
+  χ = β₀ - β₁ = 5 - 0 = 5
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 388
+  N3 (vértices con tres conexiones): 368
+  N1 - N3: 20
+  x = (N1 - N3)/4: 5.00
+  Código binario: 110000100101110000
+  Verificación con Euler-Poincaré:
+    VCC (x): 5.00
+    E-P (β₀-β₁): 5
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 5
+  N2v (segmentos verticales): 5
+  N2d (segmentos diagonales): 5
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000001010000010100000101
+
+  Dirección Horizontal:
+    Número de segmentos: 5
+    Longitud media: 3296.00
+    Longitud máxima: 5779
+    Distribución de longitudes: 5772, 5779, 373, 373, 4183
+
+  Dirección Vertical:
+    Número de segmentos: 5
+    Longitud media: 3296.00
+    Longitud máxima: 5779
+    Distribución de longitudes: 5772, 373, 4183, 373, 5779
+
+  Dirección Diagonal:
+    Número de segmentos: 5
+    Longitud media: 3303.80
+    Longitud máxima: 5775
+    Distribución de longitudes: 5773, 377, 5775, 4217, 377
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 15
+    Longitud media global: 3298.60
+    Longitud máxima global: 5779
+    Ratio direccional: 1.00
+
+==================================================
+
+CASO: spiral_holes
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 3
+  β₁ (Agujeros topológicos): 8
+
+Características de Euler:
+  χ = V - E + F = 16837 - 32697 + 15853 = -7
+  χ = β₀ - β₁ = 3 - 8 = -5
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 549
+  N3 (vértices con tres conexiones): 569
+  N1 - N3: -20
+  x = (N1 - N3)/4: -5.00
+  Código binario: 10001001011000111001
+  Verificación con Euler-Poincaré:
+    VCC (x): -5.00
+    E-P (β₀-β₁): -5
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 3
+  N2v (segmentos verticales): 3
+  N2d (segmentos diagonales): 3
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000000110000001100000011
+
+  Dirección Horizontal:
+    Número de segmentos: 3
+    Longitud media: 5284.33
+    Longitud máxima: 14598
+    Distribución de longitudes: 14598, 870, 385
+
+  Dirección Vertical:
+    Número de segmentos: 3
+    Longitud media: 5284.33
+    Longitud máxima: 14598
+    Distribución de longitudes: 385, 14598, 870
+
+  Dirección Diagonal:
+    Número de segmentos: 3
+    Longitud media: 5288.33
+    Longitud máxima: 15473
+    Distribución de longitudes: 15473, 1, 391
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 9
+    Longitud media global: 5285.67
+    Longitud máxima global: 15473
+    Ratio direccional: 1.00
 
 ==================================================
 
