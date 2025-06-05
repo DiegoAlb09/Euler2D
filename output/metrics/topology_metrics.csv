@@ -1,0 +1,7 @@
+case_name,beta0,beta1,vertices,edges,faces,euler_vef,euler_poincare,is_consistent,area_fraction,perimeter
+single_blob,1,0,13104,25444,12849,509,1,False,0.1960601806640625,360
+blob_with_hole,1,1,21734,42202,21312,844,0,False,0.3251953125,601
+blob_with_three_holes,1,3,19126,36486,18538,1178,-2,False,0.282867431640625,842
+two_blobs,2,0,11376,21752,11042,666,2,False,0.168487548828125,472
+two_blobs_one_hole,2,1,15912,30400,15437,949,1,False,0.2355499267578125,676
+complex_topology,3,2,16232,30668,15633,1197,1,False,0.2385406494140625,848
