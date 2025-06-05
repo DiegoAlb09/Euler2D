@@ -8,10 +8,10 @@ Números de Betti:
   β₁ (Agujeros topológicos): 0
 
 Características de Euler:
-  χ = V - E + F = 13104 - 25444 + 12849 = 509
+  χ = V - E + F = 13112 - 25964 + 12853 = 1
   χ = β₀ - β₁ = 1 - 0 = 1
 
-Consistencia: ✗
+Consistencia: ✓
 Fracción de área: 0.1961
 Perímetro: 360
 
@@ -24,12 +24,12 @@ Números de Betti:
   β₁ (Agujeros topológicos): 1
 
 Características de Euler:
-  χ = V - E + F = 21734 - 42202 + 21312 = 844
+  χ = V - E + F = 24648 - 48880 + 24232 = 0
   χ = β₀ - β₁ = 1 - 1 = 0
 
-Consistencia: ✗
-Fracción de área: 0.3252
-Perímetro: 601
+Consistencia: ✓
+Fracción de área: 0.3698
+Perímetro: 580
 
 ==================================================
 
@@ -40,12 +40,12 @@ Números de Betti:
   β₁ (Agujeros topológicos): 3
 
 Características de Euler:
-  χ = V - E + F = 19126 - 36486 + 18538 = 1178
+  χ = V - E + F = 23523 - 46524 + 22999 = -2
   χ = β₀ - β₁ = 1 - 3 = -2
 
-Consistencia: ✗
-Fracción de área: 0.2829
-Perímetro: 842
+Consistencia: ✓
+Fracción de área: 0.3509
+Perímetro: 742
 
 ==================================================
 
@@ -56,12 +56,12 @@ Números de Betti:
   β₁ (Agujeros topológicos): 0
 
 Características de Euler:
-  χ = V - E + F = 11376 - 21752 + 11042 = 666
+  χ = V - E + F = 8400 - 16504 + 8106 = 2
   χ = β₀ - β₁ = 2 - 0 = 2
 
-Consistencia: ✗
-Fracción de área: 0.1685
-Perímetro: 472
+Consistencia: ✓
+Fracción de área: 0.1237
+Perímetro: 400
 
 ==================================================
 
@@ -72,12 +72,12 @@ Números de Betti:
   β₁ (Agujeros topológicos): 1
 
 Características de Euler:
-  χ = V - E + F = 15912 - 30400 + 15437 = 949
+  χ = V - E + F = 11116 - 21848 + 10733 = 1
   χ = β₀ - β₁ = 2 - 1 = 1
 
-Consistencia: ✗
-Fracción de área: 0.2355
-Perímetro: 676
+Consistencia: ✓
+Fracción de área: 0.1638
+Perímetro: 532
 
 ==================================================
 
@@ -88,12 +88,12 @@ Números de Betti:
   β₁ (Agujeros topológicos): 2
 
 Características de Euler:
-  χ = V - E + F = 16232 - 30668 + 15633 = 1197
+  χ = V - E + F = 9692 - 18924 + 9233 = 1
   χ = β₀ - β₁ = 3 - 2 = 1
 
-Consistencia: ✗
-Fracción de área: 0.2385
-Perímetro: 848
+Consistencia: ✓
+Fracción de área: 0.1409
+Perímetro: 636
 
 ==================================================
 

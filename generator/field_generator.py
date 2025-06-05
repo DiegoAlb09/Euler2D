@@ -42,11 +42,12 @@ def create_single_blob(size):
     center_y = size[0] // 2
     radius = min(size) // 4
     
-    return create_blob((center_x, center_y), radius, size)
+    blob = create_blob((center_x, center_y), radius, size, smooth=False)
+    return blob
 
 def create_single_blob_with_holes(size, num_holes=3):
     """
-    Crea un blob con agujeros internos
+    Crea un blob con agujeros internos - VERSIÓN CORREGIDA
     
     Args:
         size: Tamaño de la imagen
@@ -55,55 +56,85 @@ def create_single_blob_with_holes(size, num_holes=3):
     Returns:
         Array 2D con el blob y agujeros
     """
-    # Crear blob principal
+    # Crear blob principal más grande para acomodar agujeros
     center_x = size[1] // 2
     center_y = size[0] // 2
-    blob_radius = min(size) // 3
+    blob_radius = int(min(size) * 0.35)  # Blob más grande
     
-    field = create_blob((center_x, center_y), blob_radius, size)
+    field = create_blob((center_x, center_y), blob_radius, size, smooth=False)
     
-    # Crear agujeros dentro del blob
-    hole_radius = blob_radius // 4
-    min_distance = hole_radius * 2.5
+    # Configuración para agujeros
+    hole_radius = max(8, blob_radius // 6)  # Agujeros más pequeños pero visibles
+    min_distance_from_center = hole_radius + 5
+    max_distance_from_center = blob_radius - hole_radius - 5
+    min_distance_between_holes = hole_radius * 2.2
     
-    # Generar posiciones para agujeros dentro del blob
+    # Generar posiciones para agujeros usando distribución angular
     hole_positions = []
-    max_attempts = 50
     
-    for _ in range(num_holes):
-        for attempt in range(max_attempts):
-            # Generar posición dentro del blob
-            angle = np.random.uniform(0, 2 * np.pi)
-            distance = np.random.uniform(0, blob_radius * 0.6)
+    if num_holes == 1:
+        # Un agujero en el centro
+        hole_positions.append((center_x, center_y))
+    else:
+        # Múltiples agujeros distribuidos
+        for i in range(num_holes):
+            attempts = 0
+            max_attempts = 50
             
-            hole_x = center_x + distance * np.cos(angle)
-            hole_y = center_y + distance * np.sin(angle)
-            
-            # Verificar que esté dentro de los límites
-            if (hole_radius < hole_x < size[1] - hole_radius and 
-                hole_radius < hole_y < size[0] - hole_radius):
+            while attempts < max_attempts:
+                # Posición angular uniforme
+                angle = (2 * np.pi * i / num_holes) + np.random.uniform(-0.3, 0.3)
                 
-                # Verificar distancia con otros agujeros
-                valid = True
-                for hx, hy in hole_positions:
-                    if np.sqrt((hole_x - hx)**2 + (hole_y - hy)**2) < min_distance:
-                        valid = False
+                # Distancia del centro
+                if num_holes <= 3:
+                    distance = np.random.uniform(min_distance_from_center, 
+                                               max_distance_from_center * 0.7)
+                else:
+                    distance = np.random.uniform(min_distance_from_center, 
+                                               max_distance_from_center * 0.6)
+                
+                hole_x = center_x + distance * np.cos(angle)
+                hole_y = center_y + distance * np.sin(angle)
+                
+                # Verificar límites
+                if (hole_radius < hole_x < size[1] - hole_radius and 
+                    hole_radius < hole_y < size[0] - hole_radius):
+                    
+                    # Verificar distancia con otros agujeros
+                    valid = True
+                    for hx, hy in hole_positions:
+                        dist = np.sqrt((hole_x - hx)**2 + (hole_y - hy)**2)
+                        if dist < min_distance_between_holes:
+                            valid = False
+                            break
+                    
+                    if valid:
+                        hole_positions.append((hole_x, hole_y))
                         break
                 
-                if valid:
-                    hole_positions.append((hole_x, hole_y))
-                    break
+                attempts += 1
+            
+            # Si no se pudo colocar, usar posición de respaldo
+            if len(hole_positions) <= i:
+                backup_angle = 2 * np.pi * i / num_holes
+                backup_distance = (min_distance_from_center + max_distance_from_center) / 2
+                backup_x = center_x + backup_distance * np.cos(backup_angle)
+                backup_y = center_y + backup_distance * np.sin(backup_angle)
+                hole_positions.append((backup_x, backup_y))
     
     # Crear agujeros
     for hole_x, hole_y in hole_positions:
         hole = create_hole((hole_x, hole_y), hole_radius, size)
         field = field * (1 - hole)  # Restar agujero del campo
     
+    # Asegurar que el resultado sea binario
+    field = (field > 0.5).astype(float)
+    
     return field
 
 def create_multiple_blobs(size, num_blobs=2):
     """
-    Crea múltiples blobs separados
+    Crea múltiples blobs separados - VERSIÓN CORREGIDA
     
     Args:
         size: Tamaño de la imagen
@@ -112,75 +143,102 @@ def create_multiple_blobs(size, num_blobs=2):
     Returns:
         Array 2D con múltiples blobs
     """
-    blob_radius = min(size) // 6
-    min_distance = blob_radius * 3
+    blob_radius = min(size) // 7  # Blobs más pequeños para evitar superposición
+    min_distance = blob_radius * 2.5
     
-    positions = get_safe_positions(size, num_blobs, blob_radius, min_distance)
+    # Generar posiciones más controladas
+    positions = []
+    
+    if num_blobs == 2:
+        # Dos blobs: uno a la izquierda, otro a la derecha
+        left_x = size[1] // 4
+        right_x = 3 * size[1] // 4
+        center_y = size[0] // 2
+        
+        positions = [(left_x, center_y), (right_x, center_y)]
+    else:
+        positions = get_safe_positions(size, num_blobs, blob_radius, min_distance)
     
     field = np.zeros(size)
     for x, y in positions:
-        blob = create_blob((x, y), blob_radius, size)
+        blob = create_blob((x, y), blob_radius, size, smooth=False)
         field = np.maximum(field, blob)  # Unión de blobs
     
     return field
 
 def create_two_blobs_one_with_hole(size):
-    """Crea dos blobs, uno de ellos con un agujero"""
-    blob_radius = min(size) // 5
-    min_distance = blob_radius * 2.5
+    """Crea dos blobs, uno de ellos con un agujero - VERSIÓN CORREGIDA"""
+    blob_radius = min(size) // 6
     
-    # Posiciones para dos blobs
-    positions = get_safe_positions(size, 2, blob_radius, min_distance)
+    # Posiciones fijas para mejor control
+    left_x = size[1] // 4
+    right_x = 3 * size[1] // 4
+    center_y = size[0] // 2
+    
+    positions = [(left_x, center_y), (right_x, center_y)]
     
     field = np.zeros(size)
     
     # Primer blob sin agujero
-    blob1 = create_blob(positions[0], blob_radius, size)
+    blob1 = create_blob(positions[0], blob_radius, size, smooth=False)
     field = np.maximum(field, blob1)
     
     # Segundo blob con agujero
-    blob2 = create_blob(positions[1], blob_radius, size)
+    blob2 = create_blob(positions[1], blob_radius, size, smooth=False)
     
     # Crear agujero en el segundo blob
-    hole_radius = blob_radius // 3
+    hole_radius = max(6, blob_radius // 4)
     hole = create_hole(positions[1], hole_radius, size)
     blob2 = blob2 * (1 - hole)
     
     field = np.maximum(field, blob2)
     
+    # Asegurar resultado binario
+    field = (field > 0.5).astype(float)
+    
     return field
 
 def create_complex_topology(size):
     """
-    Crea una topología compleja con múltiples características
+    Crea una topología compleja con múltiples características - VERSIÓN CORREGIDA
     
-    Returns:
-        Array 2D con topología compleja
+    Expected: β₀=3, β₁=2, χ=1
     """
     field = np.zeros(size)
     
-    # Tres blobs principales
-    blob_radius = min(size) // 6
-    positions = get_safe_positions(size, 3, blob_radius, blob_radius * 2.2)
+    # Tres blobs con posiciones controladas
+    blob_radius = min(size) // 8
     
-    for i, (x, y) in enumerate(positions):
-        blob = create_blob((x, y), blob_radius, size)
-        
-        # Primer blob: sin agujero
-        if i == 0:
-            field = np.maximum(field, blob)
-        # Segundo blob: con un agujero
-        elif i == 1:
-            hole_radius = blob_radius // 3
-            hole = create_hole((x, y), hole_radius, size)
-            blob = blob * (1 - hole)
-            field = np.maximum(field, blob)
-        # Tercer blob: con un agujero
-        else:
-            hole_radius = blob_radius // 4
-            hole = create_hole((x, y), hole_radius, size)
-            blob = blob * (1 - hole)
-            field = np.maximum(field, blob)
+    # Posiciones en triángulo
+    center_x, center_y = size[1] // 2, size[0] // 2
+    offset = min(size) // 4
+    
+    positions = [
+        (center_x, center_y - offset),      # Blob superior
+        (center_x - offset, center_y + offset//2),  # Blob inferior izquierdo
+        (center_x + offset, center_y + offset//2)   # Blob inferior derecho
+    ]
+    
+    # Primer blob: sin agujero
+    blob1 = create_blob(positions[0], blob_radius, size, smooth=False)
+    field = np.maximum(field, blob1)
+    
+    # Segundo blob: con un agujero
+    blob2 = create_blob(positions[1], blob_radius, size, smooth=False)
+    hole_radius = max(5, blob_radius // 4)
+    hole2 = create_hole(positions[1], hole_radius, size)
+    blob2 = blob2 * (1 - hole2)
+    field = np.maximum(field, blob2)
+    
+    # Tercer blob: con un agujero
+    blob3 = create_blob(positions[2], blob_radius, size, smooth=False)
+    hole_radius = max(5, blob_radius // 4)
+    hole3 = create_hole(positions[2], hole_radius, size)
+    blob3 = blob3 * (1 - hole3)
+    field = np.maximum(field, blob3)
+    
+    # Asegurar resultado binario
+    field = (field > 0.5).astype(float)
     
     return field
 
