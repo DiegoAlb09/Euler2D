@@ -271,3 +271,64 @@ Perímetro: 1847
 - Métricas de tamaño y distribución
 - Conteo preciso de agujeros por componente
 - Validación topológica mejorada
+
+## 📊 Guía de Interpretación de Resultados
+
+### Interpretación de Números de Betti
+1. **β₀ (Beta-0)**
+   - Representa el número de componentes conectados
+   - Un β₀ = 1 significa una única pieza
+   - Un β₀ > 1 indica múltiples piezas separadas
+   - Ejemplo: Dos círculos separados tienen β₀ = 2
+
+2. **β₁ (Beta-1)**
+   - Representa el número de agujeros o ciclos
+   - Un β₁ = 0 significa que no hay agujeros
+   - Cada agujero aumenta β₁ en 1
+   - Ejemplo: Un anillo tiene β₁ = 1
+
+### Fórmulas de Euler y su Significado
+
+#### 1. Fórmula Clásica (χ = V - E + F)
+- **V (Vértices)**: Puntos en la malla discreta
+- **E (Aristas)**: Conexiones entre vértices
+- **F (Caras)**: Áreas encerradas (píxeles)
+- Esta fórmula es útil para:
+  * Verificar la integridad de la malla
+  * Detectar errores en la discretización
+  * Analizar la estructura local
+
+#### 2. Fórmula de Euler-Poincaré (χ = β₀ - β₁)
+- Basada en características globales
+- Más intuitiva para interpretar la forma general
+- Ventajas:
+  * No depende de la discretización
+  * Captura propiedades topológicas globales
+  * Más robusta ante pequeñas variaciones
+
+### Relación entre Ambas Fórmulas
+- Ambas deben dar el mismo resultado (χ)
+- Si difieren, posibles causas:
+  * Errores en la discretización
+  * Problemas en la detección de bordes
+  * Inconsistencias en la conectividad
+
+### Ejemplos Prácticos de Interpretación
+
+1. **Objeto Simple (χ = 1)**
+   - Un círculo lleno o un cuadrado
+   - β₀ = 1 (una pieza)
+   - β₁ = 0 (sin agujeros)
+   - V - E + F = 1
+
+2. **Anillo (χ = 0)**
+   - Un círculo con un agujero
+   - β₀ = 1 (una pieza)
+   - β₁ = 1 (un agujero)
+   - V - E + F = 0
+
+3. **Objeto Complejo (χ = -1)**
+   - Una pieza con dos agujeros
+   - β₀ = 1 (una pieza)
+   - β₁ = 2 (dos agujeros)
+   - V - E + F = -1
