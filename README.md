@@ -36,6 +36,7 @@ Euler2D es una biblioteca Python para el análisis topológico de imágenes 2D u
 # Clonar el repositorio
 git clone https://github.com/DiegoAlb09/Euler2D.git
 cd Euler2D
+python main.py
 
 # Instalar dependencias
 pip install -r requirements.txt
