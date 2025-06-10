@@ -4,7 +4,8 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.topology_config import TOPOLOGY_CONFIG
-from generator.case_definitions import create_blob, create_hole, get_safe_positions
+
+# All pattern generation functions are defined in this file
 
 def generate_topology_case(case_name, size=(256, 256), seed=None):
     """
@@ -21,30 +22,31 @@ def generate_topology_case(case_name, size=(256, 256), seed=None):
     if seed is not None:
         np.random.seed(seed)
     
-    if case_name == 'single_blob':
-        return create_single_blob(size)
-    elif case_name == 'blob_with_hole':
-        return create_single_blob_with_holes(size, num_holes=1)
-    elif case_name == 'blob_with_three_holes':
-        return create_single_blob_with_holes(size, num_holes=3)
-    elif case_name == 'two_blobs':
-        return create_multiple_blobs(size, num_blobs=2)
-    elif case_name == 'two_blobs_one_hole':
-        return create_two_blobs_one_with_hole(size)
-    elif case_name == 'complex_topology':
-        return create_complex_topology(size)
-    elif case_name == 'irregular_star':
-        return create_irregular_star(size)
-    elif case_name == 'irregular_chain':
-        return create_irregular_chain(size)
-    elif case_name == 'irregular_mesh':
-        return create_irregular_mesh(size)
-    elif case_name == 'irregular_clusters':
-        return create_irregular_clusters(size)
-    elif case_name == 'spiral_holes':
-        return create_spiral_holes(size)
-    else:
+    # Map case names to their generation functions
+    topology_cases = {
+        'single_blob': create_single_blob,
+        'blob_with_hole': lambda s: create_single_blob_with_holes(s, num_holes=1),
+        'blob_with_three_holes': lambda s: create_single_blob_with_holes(s, num_holes=3),
+        'two_blobs': lambda s: create_multiple_blobs(s, num_blobs=2),
+        'two_blobs_one_hole': create_two_blobs_one_with_hole,
+        'complex_topology': create_complex_topology,
+        'irregular_star': create_irregular_star,
+        'irregular_chain': create_irregular_chain,
+        'irregular_mesh': create_irregular_mesh,
+        'irregular_clusters': create_irregular_clusters,
+        'spiral_holes': create_spiral_holes,
+        'horizontal_dominant': create_horizontal_dominant,
+        'vertical_dominant': create_vertical_dominant,
+        'asymmetric_mesh': create_asymmetric_mesh,
+        'asymmetric_spiral': create_asymmetric_spiral,
+        'asymmetric_branches': create_asymmetric_branches
+    }
+    
+    if case_name not in topology_cases:
         raise ValueError(f"Caso desconocido: {case_name}")
+        
+    # Call the generation function with the specified size
+    return topology_cases[case_name](size)
 
 def create_single_blob(size):
     """Crea un blob único sin agujeros"""
@@ -496,3 +498,245 @@ def add_noise_to_field(field, noise_level=0.05):
     noise = np.random.normal(0, noise_level, field.shape)
     noisy_field = field + noise
     return np.clip(noisy_field, 0, 1)
+
+# Functions moved from case_definitions.py to avoid circular imports
+def create_blob(center, radius, size, smooth=False):
+    """
+    Crea un blob circular en la imagen - VERSIÓN CORREGIDA
+    
+    Args:
+        center: Tupla (x, y) del centro
+        radius: Radio del blob
+        size: Tamaño de la imagen (height, width)
+        smooth: Si aplicar suavizado gaussiano
+        
+    Returns:
+        Array 2D con el blob
+    """
+    y, x = np.ogrid[:size[0], :size[1]]
+    mask = (x - center[0])**2 + (y - center[1])**2 <= radius**2
+    blob = np.zeros(size, dtype=float)
+    blob[mask] = 1.0
+    
+    if smooth:
+        blob = gaussian_filter(blob, sigma=TOPOLOGY_CONFIG['smoothing_sigma'])
+        # Mantener binarización más estricta para topología clara
+        blob = (blob > 0.3).astype(float)
+    
+    return blob
+
+def create_hole(center, radius, size):
+    """
+    Crea un agujero circular - VERSIÓN CORREGIDA
+    
+    Args:
+        center: Tupla (x, y) del centro
+        radius: Radio del agujero
+        size: Tamaño de la imagen
+        
+    Returns:
+        Array 2D con el agujero (1=agujero, 0=material)
+    """
+    y, x = np.ogrid[:size[0], :size[1]]
+    mask = (x - center[0])**2 + (y - center[1])**2 <= radius**2
+    hole = np.zeros(size, dtype=float)
+    hole[mask] = 1.0
+    return hole
+
+def get_safe_positions(size, num_positions, min_radius, min_distance):
+    """
+    Genera posiciones que no se superpongan - VERSIÓN MEJORADA
+    
+    Args:
+        size: Tamaño de la imagen
+        num_positions: Número de posiciones a generar
+        min_radius: Radio mínimo de las características
+        min_distance: Distancia mínima entre características
+        
+    Returns:
+        Lista de posiciones (x, y)
+    """
+    positions = []
+    max_attempts = 200  # Más intentos
+    margin = min_radius + 10  # Margen desde el borde
+    
+    for i in range(num_positions):
+        best_position = None
+        best_min_distance = 0
+        
+        for attempt in range(max_attempts):
+            x = np.random.randint(margin, size[1] - margin)
+            y = np.random.randint(margin, size[0] - margin)
+            
+            # Calcular distancia mínima a posiciones existentes
+            if positions:
+                distances = [np.sqrt((x - px)**2 + (y - py)**2) for px, py in positions]
+                current_min_distance = min(distances)
+            else:
+                current_min_distance = float('inf')
+            
+            # Si cumple la distancia mínima, usarla inmediatamente
+            if current_min_distance >= min_distance:
+                positions.append((x, y))
+                break
+            
+            # Si no, guardar la mejor hasta ahora
+            if current_min_distance > best_min_distance:
+                best_min_distance = current_min_distance
+                best_position = (x, y)
+        
+        # Si no se encontró una posición válida, usar la mejor
+        if len(positions) <= i and best_position is not None:
+            positions.append(best_position)
+        elif len(positions) <= i:
+            # Última opción: posición determinística
+            if num_positions == 2:
+                if i == 0:
+                    positions.append((size[1]//3, size[0]//2))
+                else:
+                    positions.append((2*size[1]//3, size[0]//2))
+            else:
+                # Para otros números de posiciones, usar una cuadrícula
+                grid_size = int(np.ceil(np.sqrt(num_positions)))
+                x = margin + (i % grid_size) * ((size[1] - 2*margin) // (grid_size - 1))
+                y = margin + (i // grid_size) * ((size[0] - 2*margin) // (grid_size - 1))
+                positions.append((x, y))
+    
+    return positions
+
+def create_horizontal_dominant(size):
+    """
+    Crea una topología con dominancia de segmentos horizontales
+    """
+    field = np.zeros(size)
+    
+    # Crear varios segmentos horizontales de diferentes longitudes
+    y_positions = [size[0]//4, size[0]//2, 3*size[0]//4]
+    lengths = [size[1]//2, 3*size[1]//4, size[1]//3]
+    
+    for y, length in zip(y_positions, lengths):
+        start_x = np.random.randint(0, size[1] - length)
+        field[y, start_x:start_x+length] = 1
+    
+    # Añadir algunos segmentos verticales más cortos para conectividad
+    x_positions = [size[1]//3, 2*size[1]//3]
+    for x in x_positions:
+        start_y = np.random.randint(size[0]//4, 3*size[0]//4)
+        length = size[0]//6
+        field[start_y:start_y+length, x] = 1
+    
+    return field
+
+def create_vertical_dominant(size):
+    """
+    Crea una topología con dominancia de segmentos verticales
+    """
+    field = np.zeros(size)
+    
+    # Crear varios segmentos verticales de diferentes longitudes
+    x_positions = [size[1]//4, size[1]//2, 3*size[1]//4]
+    lengths = [size[0]//2, 3*size[0]//4, size[0]//3]
+    
+    for x, length in zip(x_positions, lengths):
+        start_y = np.random.randint(0, size[0] - length)
+        field[start_y:start_y+length, x] = 1
+    
+    # Añadir algunos segmentos horizontales más cortos para conectividad
+    y_positions = [size[0]//3, 2*size[0]//3]
+    for y in y_positions:
+        start_x = np.random.randint(size[1]//4, 3*size[1]//4)
+        length = size[1]//6
+        field[y, start_x:start_x+length] = 1
+    
+    return field
+
+def create_asymmetric_mesh(size):
+    """
+    Crea una malla asimétrica con más segmentos en una dirección
+    """
+    field = np.zeros(size)
+    
+    # Más líneas horizontales que verticales
+    h_spacing = size[0] // 6
+    v_spacing = size[1] // 4
+    
+    # Líneas horizontales con variación
+    for i in range(1, 6):
+        y = i * h_spacing
+        length = size[1] - np.random.randint(0, size[1]//4)
+        start_x = np.random.randint(0, size[1]//4)
+        field[y, start_x:start_x+length] = 1
+    
+    # Menos líneas verticales
+    for i in range(1, 4):
+        x = i * v_spacing
+        length = size[0] - np.random.randint(0, size[0]//4)
+        start_y = np.random.randint(0, size[0]//4)
+        field[start_y:start_y+length, x] = 1
+    
+    return field
+
+def create_asymmetric_spiral(size):
+    """
+    Crea una espiral asimétrica con segmentos de diferentes longitudes
+    """
+    field = np.zeros(size)
+    center = (size[0]//2, size[1]//2)
+    max_radius = min(size) // 3
+    
+    # Crear espiral con segmentos asimétricos
+    radius = max_radius
+    angle = 0
+    while radius > max_radius//4:
+        # Segmento horizontal más largo
+        x1 = int(center[1] + radius * np.cos(angle))
+        x2 = int(center[1] + radius * 1.5 * np.cos(angle))
+        y = int(center[0] + radius * np.sin(angle))
+        if 0 <= y < size[0]:
+            x_min, x_max = max(0, min(x1, x2)), min(size[1], max(x1, x2))
+            field[y, x_min:x_max] = 1
+        
+        # Segmento vertical más corto
+        x = int(center[1] + radius * np.cos(angle + np.pi/2))
+        y1 = int(center[0] + radius * np.sin(angle + np.pi/2))
+        y2 = int(center[0] + radius * 0.7 * np.sin(angle + np.pi/2))
+        if 0 <= x < size[1]:
+            y_min, y_max = max(0, min(y1, y2)), min(size[0], max(y1, y2))
+            field[y_min:y_max, x] = 1
+        
+        radius -= max_radius//8
+        angle += np.pi/2
+    
+    return field
+
+def create_asymmetric_branches(size):
+    """
+    Crea una estructura ramificada asimétrica
+    """
+    field = np.zeros(size)
+    
+    # Tronco principal vertical
+    trunk_x = size[1]//2
+    field[:, trunk_x] = 1
+    
+    # Ramas horizontales de diferentes longitudes
+    y_positions = [size[0]//4, size[0]//2, 3*size[0]//4]
+    lengths = [size[1]//2, 3*size[1]//4, size[1]//3]
+    
+    for y, length in zip(y_positions, lengths):
+        # Rama hacia la derecha
+        field[y, trunk_x:trunk_x+length] = 1
+        
+        # Algunas ramas más cortas hacia la izquierda
+        left_length = length//2
+        field[y, trunk_x-left_length:trunk_x] = 1
+        
+        # Añadir algunas ramas verticales pequeñas
+        for x in [trunk_x + length//2, trunk_x - left_length//2]:
+            if 0 <= x < size[1]:
+                vert_length = size[0]//8
+                start_y = max(0, y - vert_length//2)
+                end_y = min(size[0], y + vert_length//2)
+                field[start_y:end_y, x] = 1
+    
+    return field

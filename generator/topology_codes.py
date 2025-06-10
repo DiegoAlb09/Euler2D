@@ -4,21 +4,30 @@ from .topology_base import compute_betti_numbers_2d
 
 def generate_vcc_string(N1, N3):
     """
-    Genera la cadena de código VCC
+    Genera la cadena de código VCC usando codificación ternaria (0,1,2)
     
     Args:
         N1: Número de vértices con una conexión
         N3: Número de vértices con tres conexiones
         
     Returns:
-        str: Cadena que representa el código VCC
+        str: Cadena que representa el código VCC en base 3
     """
-    # Convertir N1 y N3 a binario y eliminar el '0b' del inicio
-    N1_bin = bin(N1)[2:].zfill(8)  # Asegurar 8 bits
-    N3_bin = bin(N3)[2:].zfill(8)
+    # Convertir N1 y N3 a base 3
+    def to_base3(n):
+        if n == 0:
+            return "0"
+        digits = []
+        while n:
+            digits.append(str(n % 3))
+            n //= 3
+        return "".join(reversed(digits))
     
-    # Combinar las cadenas binarias
-    vcc_string = f"{N1_bin}{N3_bin}"
+    N1_base3 = to_base3(N1).zfill(6)  # 6 dígitos en base 3
+    N3_base3 = to_base3(N3).zfill(6)
+    
+    # Combinar las cadenas
+    vcc_string = f"{N1_base3}{N3_base3}"
     
     return vcc_string
 
@@ -104,7 +113,7 @@ def compute_vcc(binary_image):
 
 def generate_3ot_string(N2h, N2v, N2d):
     """
-    Genera la cadena de código 3OT
+    Genera la cadena de código 3OT usando codificación ternaria (0,1,2)
     
     Args:
         N2h: Número de segmentos horizontales
@@ -112,22 +121,31 @@ def generate_3ot_string(N2h, N2v, N2d):
         N2d: Número de segmentos diagonales
         
     Returns:
-        str: Cadena que representa el código 3OT
+        str: Cadena que representa el código 3OT en base 3
     """
-    # Convertir cada valor a binario y asegurar 8 bits
-    N2h_bin = bin(N2h)[2:].zfill(8)
-    N2v_bin = bin(N2v)[2:].zfill(8)
-    N2d_bin = bin(N2d)[2:].zfill(8)
+    # Convertir cada valor a base 3
+    def to_base3(n):
+        if n == 0:
+            return "0"
+        digits = []
+        while n:
+            digits.append(str(n % 3))
+            n //= 3
+        return "".join(reversed(digits))
     
-    # Combinar las cadenas binarias
-    ot3_string = f"{N2h_bin}{N2v_bin}{N2d_bin}"
+    N2h_base3 = to_base3(N2h).zfill(6)
+    N2v_base3 = to_base3(N2v).zfill(6)
+    N2d_base3 = to_base3(N2d).zfill(6)
+    
+    # Combinar las cadenas
+    ot3_string = f"{N2h_base3}{N2v_base3}{N2d_base3}"
     
     return ot3_string
 
 def compute_3ot(binary_image):
     """
     Calcula el código 3OT (Three Orthogonal Topology)
-    X = (N2h - N2v)/4
+    X = (N2h - N2v)/4 = N - H (Euler-Poincaré)
     
     Args:
         binary_image: Imagen binaria donde 1=material, 0=poro
@@ -139,30 +157,103 @@ def compute_3ot(binary_image):
     binary = (binary_image > 0.5).astype(bool)
     h, w = binary.shape
     
-    def analyze_direction(img):
-        """Analiza una dirección específica"""
-        labeled, num_components = label(img)
+    def find_segments_with_neighbors(img):
+        """
+        Encuentra segmentos conectados considerando vecinos
+        Retorna lista de segmentos con sus coordenadas y longitudes
+        """
+        segments = []
+        h, w = img.shape
+        visited = np.zeros_like(img, dtype=bool)
         
-        lengths = []
-        for i in range(1, num_components + 1):
-            segment = (labeled == i)
-            length = np.sum(segment)
-            lengths.append(length)
+        def is_valid_segment(i, j, direction='h'):
+            """Verifica si un píxel puede ser parte de un segmento"""
+            if not img[i, j] or visited[i, j]:
+                return False
+                
+            # Verificar vecinos perpendiculares
+            if direction == 'h':
+                # Para segmentos horizontales, verificar vecinos arriba y abajo
+                has_vertical_neighbor = False
+                if i > 0:
+                    has_vertical_neighbor = has_vertical_neighbor or img[i-1, j]
+                if i < h-1:
+                    has_vertical_neighbor = has_vertical_neighbor or img[i+1, j]
+                return not has_vertical_neighbor
+            else:
+                # Para segmentos verticales, verificar vecinos izquierda y derecha
+                has_horizontal_neighbor = False
+                if j > 0:
+                    has_horizontal_neighbor = has_horizontal_neighbor or img[i, j-1]
+                if j < w-1:
+                    has_horizontal_neighbor = has_horizontal_neighbor or img[i, j+1]
+                return not has_horizontal_neighbor
         
-        return {
-            'num_segments': len(lengths),
-            'avg_length': np.mean(lengths) if lengths else 0,
-            'max_length': np.max(lengths) if lengths else 0,
-            'lengths': lengths
-        }
+        # Buscar segmentos horizontales
+        for i in range(h):
+            start = None
+            for j in range(w):
+                if is_valid_segment(i, j, 'h'):
+                    if start is None:
+                        start = j
+                    visited[i, j] = True
+                elif start is not None:
+                    segments.append({
+                        'start': (i, start),
+                        'end': (i, j-1),
+                        'length': j - start,
+                        'direction': 'h'
+                    })
+                    start = None
+            if start is not None:
+                segments.append({
+                    'start': (i, start),
+                    'end': (i, w-1),
+                    'length': w - start,
+                    'direction': 'h'
+                })
+        
+        # Reiniciar visited para segmentos verticales
+        visited = np.zeros_like(img, dtype=bool)
+        
+        # Buscar segmentos verticales
+        for j in range(w):
+            start = None
+            for i in range(h):
+                if is_valid_segment(i, j, 'v'):
+                    if start is None:
+                        start = i
+                    visited[i, j] = True
+                elif start is not None:
+                    segments.append({
+                        'start': (j, start),
+                        'end': (j, i-1),
+                        'length': i - start,
+                        'direction': 'v'
+                    })
+                    start = None
+            if start is not None:
+                segments.append({
+                    'start': (j, start),
+                    'end': (j, h-1),
+                    'length': h - start,
+                    'direction': 'v'
+                })
+        
+        return segments
     
-    # Análisis horizontal (0°)
-    horizontal = analyze_direction(binary)
-    N2h = horizontal['num_segments']
+    # Análisis horizontal y vertical
+    segments = find_segments_with_neighbors(binary)
     
-    # Análisis vertical (90°)
-    vertical = analyze_direction(binary.T)
-    N2v = vertical['num_segments']
+    # Separar segmentos horizontales y verticales
+    horizontal_segments = [s for s in segments if s['direction'] == 'h']
+    vertical_segments = [s for s in segments if s['direction'] == 'v']
+    
+    N2h = len(horizontal_segments)
+    N2v = len(vertical_segments)
+    
+    horizontal_lengths = [seg['length'] for seg in horizontal_segments]
+    vertical_lengths = [seg['length'] for seg in vertical_segments]
     
     # Análisis diagonal (45°)
     h_pad = w
@@ -176,36 +267,78 @@ def compute_3ot(binary_image):
     rotated = rotate(diagonal_img.astype(float), 45, reshape=True)
     rotated = (rotated > 0.5)
     
-    diagonal = analyze_direction(rotated)
-    N2d = diagonal['num_segments']
+    diagonal_segments = find_segments_with_neighbors(rotated)
+    N2d = len([s for s in diagonal_segments if s['direction'] == 'h'])  # Solo contar una dirección
+    diagonal_lengths = [seg['length'] for seg in diagonal_segments]
     
-    # Calcular X según la nueva fórmula
+    # Calcular X según la fórmula 3OT
     X = (N2h - N2v) / 4
+    
+    # Calcular Euler-Poincaré para verificación
+    beta0, beta1 = compute_betti_numbers_2d(binary)
+    euler_poincare = beta0 - beta1
+    
+    # Verificar relación con Euler-Poincaré
+    is_consistent = abs(X - euler_poincare) < 1e-10
     
     # Generar cadena 3OT
     ot3_string = generate_3ot_string(N2h, N2v, N2d)
     
+    # Información detallada de segmentos
+    horizontal_info = {
+        'segments': horizontal_segments,
+        'num_segments': N2h,
+        'lengths': horizontal_lengths,
+        'avg_length': np.mean(horizontal_lengths) if horizontal_lengths else 0,
+        'max_length': max(horizontal_lengths) if horizontal_lengths else 0
+    }
+    
+    vertical_info = {
+        'segments': vertical_segments,
+        'num_segments': N2v,
+        'lengths': vertical_lengths,
+        'avg_length': np.mean(vertical_lengths) if vertical_lengths else 0,
+        'max_length': max(vertical_lengths) if vertical_lengths else 0
+    }
+    
+    diagonal_info = {
+        'segments': diagonal_segments,
+        'num_segments': N2d,
+        'lengths': diagonal_lengths,
+        'avg_length': np.mean(diagonal_lengths) if diagonal_lengths else 0,
+        'max_length': max(diagonal_lengths) if diagonal_lengths else 0
+    }
+    
     # Métricas combinadas
     combined = {
         'total_segments': N2h + N2v + N2d,
-        'avg_all_lengths': np.mean([horizontal['avg_length'], 
-                                  vertical['avg_length'], 
-                                  diagonal['avg_length']]),
-        'max_all_lengths': max(horizontal['max_length'], 
-                             vertical['max_length'], 
-                             diagonal['max_length']),
+        'avg_all_lengths': np.mean([horizontal_info['avg_length'], 
+                                  vertical_info['avg_length'], 
+                                  diagonal_info['avg_length']]),
+        'max_all_lengths': max(horizontal_info['max_length'], 
+                             vertical_info['max_length'], 
+                             diagonal_info['max_length']),
         'directional_ratio': max(N2h, N2v, N2d) / 
                             (min(N2h, N2v, N2d) + 1e-6),
-        'X_value': X
+        'X_value': X,
+        'euler_poincare': euler_poincare,
+        'is_consistent': is_consistent,
+        'difference': abs(X - euler_poincare)
     }
     
     return {
-        'horizontal': horizontal,
-        'vertical': vertical,
-        'diagonal': diagonal,
+        'horizontal': horizontal_info,
+        'vertical': vertical_info,
+        'diagonal': diagonal_info,
         'combined': combined,
         'code_string': ot3_string,
         'N2h': N2h,
         'N2v': N2v,
-        'N2d': N2d
+        'N2d': N2d,
+        'debug_info': {
+            'image_shape': binary.shape,
+            'rotated_shape': rotated.shape,
+            'horizontal_segments_detail': [f"({s['start']} -> {s['end']}, len={s['length']})" for s in horizontal_segments],
+            'vertical_segments_detail': [f"({s['start']} -> {s['end']}, len={s['length']})" for s in vertical_segments]
+        }
     } 

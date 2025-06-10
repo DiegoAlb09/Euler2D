@@ -6,7 +6,15 @@ from .field_generator import (
     create_single_blob,
     create_single_blob_with_holes,
     create_multiple_blobs,
-    create_complex_topology
+    create_complex_topology,
+    create_blob,
+    create_hole,
+    get_safe_positions,
+    create_horizontal_dominant,
+    create_vertical_dominant,
+    create_asymmetric_mesh,
+    create_asymmetric_spiral,
+    create_asymmetric_branches
 )
 
 from .topology_metrics import (
@@ -29,10 +37,7 @@ from .visualizer import (
 
 from .case_definitions import (
     get_topology_cases,
-    validate_case_topology,
-    create_blob,
-    create_hole,
-    get_safe_positions
+    validate_case_topology
 )
 
 __all__ = [
@@ -43,6 +48,11 @@ __all__ = [
     'create_single_blob_with_holes',
     'create_multiple_blobs',
     'create_complex_topology',
+    'create_horizontal_dominant',
+    'create_vertical_dominant',
+    'create_asymmetric_mesh',
+    'create_asymmetric_spiral',
+    'create_asymmetric_branches',
     
     # Topology metrics
     'compute_betti_numbers_2d',

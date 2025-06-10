@@ -16,7 +16,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 152
   N1 - N3: 4
   x = (N1 - N3)/4: 1.00
-  Código binario: 1001110010011000
+  Código binario: 012210012122
   Verificación con Euler-Poincaré:
     VCC (x): 1.00
     E-P (β₀-β₁): 1
@@ -24,35 +24,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 1
-  N2v (segmentos verticales): 1
-  N2d (segmentos diagonales): 1
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 6
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000010000000100000001
+  Código binario: 000002000002000020
 
   Dirección Horizontal:
-    Número de segmentos: 1
-    Longitud media: 12853.00
-    Longitud máxima: 12853
-    Distribución de longitudes: 12853
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 1
-    Longitud media: 12853.00
-    Longitud máxima: 12853
-    Distribución de longitudes: 12853
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 1
-    Longitud media: 12866.00
-    Longitud máxima: 12866
-    Distribución de longitudes: 12866
+    Número de segmentos: 6
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 3
-    Longitud media global: 12857.33
-    Longitud máxima global: 12866
-    Ratio direccional: 1.00
+    Total de segmentos: 10
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 3.00
 
 ==================================================
 
@@ -71,7 +71,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 252
   N1 - N3: 0
   x = (N1 - N3)/4: 0.00
-  Código binario: 1111110011111100
+  Código binario: 100100100100
   Verificación con Euler-Poincaré:
     VCC (x): 0.00
     E-P (β₀-β₁): 0
@@ -79,34 +79,34 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 1
-  N2v (segmentos verticales): 1
-  N2d (segmentos diagonales): 1
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 2
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000010000000100000001
+  Código binario: 000002000002000002
 
   Dirección Horizontal:
-    Número de segmentos: 1
-    Longitud media: 24232.00
-    Longitud máxima: 24232
-    Distribución de longitudes: 24232
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 1
-    Longitud media: 24232.00
-    Longitud máxima: 24232
-    Distribución de longitudes: 24232
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 1
-    Longitud media: 24230.00
-    Longitud máxima: 24230
-    Distribución de longitudes: 24230
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 3
-    Longitud media global: 24231.33
-    Longitud máxima global: 24232
+    Total de segmentos: 6
+    Longitud media global: 1.00
+    Longitud máxima global: 1
     Ratio direccional: 1.00
 
 ==================================================
@@ -126,7 +126,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 318
   N1 - N3: -8
   x = (N1 - N3)/4: -2.00
-  Código binario: 100110110100111110
+  Código binario: 102111102210
   Verificación con Euler-Poincaré:
     VCC (x): -2.00
     E-P (β₀-β₁): -2
@@ -134,35 +134,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 1
-  N2v (segmentos verticales): 1
-  N2d (segmentos diagonales): 1
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 2
+  N2d (segmentos diagonales): 3
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000010000000100000001
+  Código binario: 000002000002000010
 
   Dirección Horizontal:
-    Número de segmentos: 1
-    Longitud media: 22999.00
-    Longitud máxima: 22999
-    Distribución de longitudes: 22999
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 1
-    Longitud media: 22999.00
-    Longitud máxima: 22999
-    Distribución de longitudes: 22999
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 1
-    Longitud media: 22997.00
-    Longitud máxima: 22997
-    Distribución de longitudes: 22997
+    Número de segmentos: 3
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 3
-    Longitud media global: 22998.33
-    Longitud máxima global: 22999
-    Ratio direccional: 1.00
+    Total de segmentos: 7
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 1.50
 
 ==================================================
 
@@ -181,7 +181,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 176
   N1 - N3: 8
   x = (N1 - N3)/4: 2.00
-  Código binario: 1011100010110000
+  Código binario: 020211020112
   Verificación con Euler-Poincaré:
     VCC (x): 2.00
     E-P (β₀-β₁): 2
@@ -189,35 +189,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 2
-  N2v (segmentos verticales): 2
-  N2d (segmentos diagonales): 2
+  N2h (segmentos horizontales): 4
+  N2v (segmentos verticales): 4
+  N2d (segmentos diagonales): 3
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000100000001000000010
+  Código binario: 000011000011000010
 
   Dirección Horizontal:
-    Número de segmentos: 2
-    Longitud media: 4053.00
-    Longitud máxima: 4053
-    Distribución de longitudes: 4053, 4053
+    Número de segmentos: 4
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 2
-    Longitud media: 4053.00
-    Longitud máxima: 4053
-    Distribución de longitudes: 4053, 4053
+    Número de segmentos: 4
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 2
-    Longitud media: 4048.00
-    Longitud máxima: 4050
-    Distribución de longitudes: 4050, 4046
+    Número de segmentos: 3
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 6
-    Longitud media global: 4051.33
-    Longitud máxima global: 4053
-    Ratio direccional: 1.00
+    Total de segmentos: 11
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 1.33
 
 ==================================================
 
@@ -236,7 +236,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 228
   N1 - N3: 4
   x = (N1 - N3)/4: 1.00
-  Código binario: 1110100011100100
+  Código binario: 022121022110
   Verificación con Euler-Poincaré:
     VCC (x): 1.00
     E-P (β₀-β₁): 1
@@ -244,35 +244,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 2
-  N2v (segmentos verticales): 2
-  N2d (segmentos diagonales): 2
+  N2h (segmentos horizontales): 4
+  N2v (segmentos verticales): 4
+  N2d (segmentos diagonales): 9
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000100000001000000010
+  Código binario: 000011000011000100
 
   Dirección Horizontal:
-    Número de segmentos: 2
-    Longitud media: 5366.50
-    Longitud máxima: 5525
-    Distribución de longitudes: 5525, 5208
+    Número de segmentos: 4
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 2
-    Longitud media: 5366.50
-    Longitud máxima: 5525
-    Distribución de longitudes: 5525, 5208
+    Número de segmentos: 4
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 2
-    Longitud media: 5362.00
-    Longitud máxima: 5526
-    Distribución de longitudes: 5198, 5526
+    Número de segmentos: 9
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 6
-    Longitud media global: 5365.00
-    Longitud máxima global: 5526
-    Ratio direccional: 1.00
+    Total de segmentos: 17
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 2.25
 
 ==================================================
 
@@ -291,7 +291,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 276
   N1 - N3: 4
   x = (N1 - N3)/4: 1.00
-  Código binario: 100011000100010100
+  Código binario: 101101101020
   Verificación con Euler-Poincaré:
     VCC (x): 1.00
     E-P (β₀-β₁): 1
@@ -299,35 +299,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 3
-  N2v (segmentos verticales): 3
-  N2d (segmentos diagonales): 3
+  N2h (segmentos horizontales): 6
+  N2v (segmentos verticales): 6
+  N2d (segmentos diagonales): 4
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000000110000001100000011
+  Código binario: 000020000020000011
 
   Dirección Horizontal:
-    Número de segmentos: 3
-    Longitud media: 3077.67
-    Longitud máxima: 3209
-    Distribución de longitudes: 3209, 3012, 3012
+    Número de segmentos: 6
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 3
-    Longitud media: 3077.67
-    Longitud máxima: 3209
-    Distribución de longitudes: 3012, 3209, 3012
+    Número de segmentos: 6
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 3
-    Longitud media: 3079.00
-    Longitud máxima: 3211
-    Distribución de longitudes: 3211, 3018, 3008
+    Número de segmentos: 4
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 9
-    Longitud media global: 3078.11
-    Longitud máxima global: 3211
-    Ratio direccional: 1.00
+    Total de segmentos: 16
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 1.50
 
 ==================================================
 
@@ -346,7 +346,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 426
   N1 - N3: 28
   x = (N1 - N3)/4: 7.00
-  Código binario: 111000110110101010
+  Código binario: 121211120210
   Verificación con Euler-Poincaré:
     VCC (x): 7.00
     E-P (β₀-β₁): 7
@@ -354,35 +354,34 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 7
-  N2v (segmentos verticales): 7
-  N2d (segmentos diagonales): 7
-  X = (N2h - N2v)/4: 0.00
-  Código binario: 000001110000011100000111
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 0
+  N2d (segmentos diagonales): 12
+  X = (N2h - N2v)/4: 0.25
+  Código binario: 000001000000000110
 
   Dirección Horizontal:
-    Número de segmentos: 7
-    Longitud media: 2164.14
-    Longitud máxima: 2709
-    Distribución de longitudes: 2667, 1557, 2273, 2709, 2369, 2093, 1481
+    Número de segmentos: 1
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1
 
   Dirección Vertical:
-    Número de segmentos: 7
-    Longitud media: 2164.14
-    Longitud máxima: 2709
-    Distribución de longitudes: 2273, 2369, 2667, 1481, 2093, 1557, 2709
+    Número de segmentos: 0
+    Longitud media: 0.00
+    Longitud máxima: 0
 
   Dirección Diagonal:
-    Número de segmentos: 7
-    Longitud media: 2164.43
-    Longitud máxima: 2714
-    Distribución de longitudes: 1552, 2714, 2670, 2091, 2273, 2376, 1475
+    Número de segmentos: 12
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 21
-    Longitud media global: 2164.24
-    Longitud máxima global: 2714
-    Ratio direccional: 1.00
+    Total de segmentos: 13
+    Longitud media global: 0.67
+    Longitud máxima global: 1
+    Ratio direccional: 12000000.00
 
 ==================================================
 
@@ -401,7 +400,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 227
   N1 - N3: 4
   x = (N1 - N3)/4: 1.00
-  Código binario: 1110011111100011
+  Código binario: 022120022102
   Verificación con Euler-Poincaré:
     VCC (x): 1.00
     E-P (β₀-β₁): 1
@@ -409,35 +408,34 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 1
-  N2v (segmentos verticales): 1
-  N2d (segmentos diagonales): 1
-  X = (N2h - N2v)/4: 0.00
-  Código binario: 000000010000000100000001
+  N2h (segmentos horizontales): 2
+  N2v (segmentos verticales): 0
+  N2d (segmentos diagonales): 7
+  X = (N2h - N2v)/4: 0.50
+  Código binario: 000002000000000021
 
   Dirección Horizontal:
-    Número de segmentos: 1
-    Longitud media: 8277.00
-    Longitud máxima: 8277
-    Distribución de longitudes: 8277
+    Número de segmentos: 2
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Vertical:
-    Número de segmentos: 1
-    Longitud media: 8277.00
-    Longitud máxima: 8277
-    Distribución de longitudes: 8277
+    Número de segmentos: 0
+    Longitud media: 0.00
+    Longitud máxima: 0
 
   Dirección Diagonal:
-    Número de segmentos: 1
-    Longitud media: 8304.00
-    Longitud máxima: 8304
-    Distribución de longitudes: 8304
+    Número de segmentos: 7
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 3
-    Longitud media global: 8286.00
-    Longitud máxima global: 8304
-    Ratio direccional: 1.00
+    Total de segmentos: 9
+    Longitud media global: 0.67
+    Longitud máxima global: 1
+    Ratio direccional: 7000000.00
 
 ==================================================
 
@@ -456,7 +454,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 607
   N1 - N3: -8
   x = (N1 - N3)/4: -2.00
-  Código binario: 10010101111001011111
+  Código binario: 211012211111
   Verificación con Euler-Poincaré:
     VCC (x): -2.00
     E-P (β₀-β₁): -3
@@ -464,35 +462,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✗
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 2
+  N2h (segmentos horizontales): 3
   N2v (segmentos verticales): 2
-  N2d (segmentos diagonales): 2
-  X = (N2h - N2v)/4: 0.00
-  Código binario: 000000100000001000000010
+  N2d (segmentos diagonales): 19
+  X = (N2h - N2v)/4: 0.25
+  Código binario: 000010000002000201
 
   Dirección Horizontal:
-    Número de segmentos: 2
-    Longitud media: 13316.00
-    Longitud máxima: 25713
-    Distribución de longitudes: 25713, 919
+    Número de segmentos: 3
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1
 
   Dirección Vertical:
     Número de segmentos: 2
-    Longitud media: 13316.00
-    Longitud máxima: 25713
-    Distribución de longitudes: 25713, 919
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1
 
   Dirección Diagonal:
-    Número de segmentos: 2
-    Longitud media: 13313.00
-    Longitud máxima: 25710
-    Distribución de longitudes: 25710, 916
+    Número de segmentos: 19
+    Longitud media: 1.03
+    Longitud máxima: 2
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 6
-    Longitud media global: 13315.00
-    Longitud máxima global: 25713
-    Ratio direccional: 1.00
+    Total de segmentos: 24
+    Longitud media global: 1.01
+    Longitud máxima global: 2
+    Ratio direccional: 9.50
 
 ==================================================
 
@@ -511,7 +509,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 368
   N1 - N3: 20
   x = (N1 - N3)/4: 5.00
-  Código binario: 110000100101110000
+  Código binario: 112101111122
   Verificación con Euler-Poincaré:
     VCC (x): 5.00
     E-P (β₀-β₁): 5
@@ -519,35 +517,35 @@ Análisis VCC (Vertex Correction Code):
     Consistencia: ✓
 
 Análisis 3OT (Three Orthogonal Topology):
-  N2h (segmentos horizontales): 5
-  N2v (segmentos verticales): 5
-  N2d (segmentos diagonales): 5
+  N2h (segmentos horizontales): 1
+  N2v (segmentos verticales): 1
+  N2d (segmentos diagonales): 9
   X = (N2h - N2v)/4: 0.00
-  Código binario: 000001010000010100000101
+  Código binario: 000001000001000100
 
   Dirección Horizontal:
-    Número de segmentos: 5
-    Longitud media: 3296.00
-    Longitud máxima: 5779
-    Distribución de longitudes: 5772, 5779, 373, 373, 4183
+    Número de segmentos: 1
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1
 
   Dirección Vertical:
-    Número de segmentos: 5
-    Longitud media: 3296.00
-    Longitud máxima: 5779
-    Distribución de longitudes: 5772, 373, 4183, 373, 5779
+    Número de segmentos: 1
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1
 
   Dirección Diagonal:
-    Número de segmentos: 5
-    Longitud media: 3303.80
-    Longitud máxima: 5775
-    Distribución de longitudes: 5773, 377, 5775, 4217, 377
+    Número de segmentos: 9
+    Longitud media: 1.05
+    Longitud máxima: 2
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 15
-    Longitud media global: 3298.60
-    Longitud máxima global: 5779
-    Ratio direccional: 1.00
+    Total de segmentos: 11
+    Longitud media global: 1.02
+    Longitud máxima global: 2
+    Ratio direccional: 9.00
 
 ==================================================
 
@@ -566,7 +564,7 @@ Análisis VCC (Vertex Correction Code):
   N3 (vértices con tres conexiones): 569
   N1 - N3: -20
   x = (N1 - N3)/4: -5.00
-  Código binario: 10001001011000111001
+  Código binario: 202100210002
   Verificación con Euler-Poincaré:
     VCC (x): -5.00
     E-P (β₀-β₁): -5
@@ -575,34 +573,309 @@ Análisis VCC (Vertex Correction Code):
 
 Análisis 3OT (Three Orthogonal Topology):
   N2h (segmentos horizontales): 3
-  N2v (segmentos verticales): 3
-  N2d (segmentos diagonales): 3
-  X = (N2h - N2v)/4: 0.00
-  Código binario: 000000110000001100000011
+  N2v (segmentos verticales): 5
+  N2d (segmentos diagonales): 10
+  X = (N2h - N2v)/4: -0.50
+  Código binario: 000010000012000101
 
   Dirección Horizontal:
     Número de segmentos: 3
-    Longitud media: 5284.33
-    Longitud máxima: 14598
-    Distribución de longitudes: 14598, 870, 385
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1
+
+  Dirección Vertical:
+    Número de segmentos: 5
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1
+
+  Dirección Diagonal:
+    Número de segmentos: 10
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 18
+    Longitud media global: 1.00
+    Longitud máxima global: 1
+    Ratio direccional: 3.33
+
+==================================================
+
+CASO: horizontal_dominant
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 4
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 984 - 1468 + 488 = 4
+  χ = β₀ - β₁ = 4 - 0 = 4
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 20
+  N3 (vértices con tres conexiones): 4
+  N1 - N3: 16
+  x = (N1 - N3)/4: 4.00
+  Código binario: 000202000011
+  Verificación con Euler-Poincaré:
+    VCC (x): 4.00
+    E-P (β₀-β₁): 4
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 4
+  N2v (segmentos verticales): 3
+  N2d (segmentos diagonales): 59
+  X = (N2h - N2v)/4: 0.25
+  Código binario: 000011000010002012
+
+  Dirección Horizontal:
+    Número de segmentos: 4
+    Longitud media: 101.00
+    Longitud máxima: 192
+    Distribución de longitudes: 128, 192, 78, 6
 
   Dirección Vertical:
     Número de segmentos: 3
-    Longitud media: 5284.33
-    Longitud máxima: 14598
-    Distribución de longitudes: 385, 14598, 870
+    Longitud media: 27.67
+    Longitud máxima: 42
+    Distribución de longitudes: 42, 22, 19
 
   Dirección Diagonal:
-    Número de segmentos: 3
-    Longitud media: 5288.33
-    Longitud máxima: 15473
-    Distribución de longitudes: 15473, 1, 391
+    Número de segmentos: 59
+    Longitud media: 1.01
+    Longitud máxima: 2
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 
   Métricas Combinadas 3OT:
-    Total de segmentos: 9
-    Longitud media global: 5285.67
-    Longitud máxima global: 15473
-    Ratio direccional: 1.00
+    Total de segmentos: 66
+    Longitud media global: 43.23
+    Longitud máxima global: 192
+    Ratio direccional: 19.67
+
+==================================================
+
+CASO: vertical_dominant
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 4
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 984 - 1468 + 488 = 4
+  χ = β₀ - β₁ = 4 - 0 = 4
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 20
+  N3 (vértices con tres conexiones): 4
+  N1 - N3: 16
+  x = (N1 - N3)/4: 4.00
+  Código binario: 000202000011
+  Verificación con Euler-Poincaré:
+    VCC (x): 4.00
+    E-P (β₀-β₁): 4
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 3
+  N2v (segmentos verticales): 4
+  N2d (segmentos diagonales): 59
+  X = (N2h - N2v)/4: -0.25
+  Código binario: 000010000011002012
+
+  Dirección Horizontal:
+    Número de segmentos: 3
+    Longitud media: 27.67
+    Longitud máxima: 42
+    Distribución de longitudes: 42, 22, 19
+
+  Dirección Vertical:
+    Número de segmentos: 4
+    Longitud media: 101.00
+    Longitud máxima: 192
+    Distribución de longitudes: 128, 192, 78, 6
+
+  Dirección Diagonal:
+    Número de segmentos: 59
+    Longitud media: 1.01
+    Longitud máxima: 2
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 66
+    Longitud media global: 43.23
+    Longitud máxima global: 192
+    Ratio direccional: 19.67
+
+==================================================
+
+CASO: asymmetric_mesh
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 1
+  β₁ (Agujeros topológicos): 7
+
+Características de Euler:
+  χ = V - E + F = 3412 - 5130 + 1712 = -6
+  χ = β₀ - β₁ = 1 - 7 = -6
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 32
+  N3 (vértices con tres conexiones): 56
+  N1 - N3: -24
+  x = (N1 - N3)/4: -6.00
+  Código binario: 001012002002
+  Verificación con Euler-Poincaré:
+    VCC (x): -6.00
+    E-P (β₀-β₁): -6
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 19
+  N2v (segmentos verticales): 17
+  N2d (segmentos diagonales): 297
+  X = (N2h - N2v)/4: 0.50
+  Código binario: 000201000122102000
+
+  Dirección Horizontal:
+    Número de segmentos: 19
+    Longitud media: 54.11
+    Longitud máxima: 127
+    Distribución de longitudes: 13, 63, 127, 50, 63, 63, 49, 57, 63, 63, 28, 44, 63, 63, 23, 7, 63, 63, 63
+
+  Dirección Vertical:
+    Número de segmentos: 17
+    Longitud media: 39.41
+    Longitud máxima: 45
+    Distribución de longitudes: 20, 41, 41, 41, 41, 45, 32, 41, 41, 41, 41, 45, 32, 41, 41, 41, 45
+
+  Dirección Diagonal:
+    Número de segmentos: 297
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 333
+    Longitud media global: 31.51
+    Longitud máxima global: 127
+    Ratio direccional: 17.47
+
+==================================================
+
+CASO: asymmetric_spiral
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 8
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 368 - 536 + 176 = 8
+  χ = β₀ - β₁ = 8 - 0 = 8
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 32
+  N3 (vértices con tres conexiones): 0
+  N1 - N3: 32
+  x = (N1 - N3)/4: 8.00
+  Código binario: 001012000000
+  Verificación con Euler-Poincaré:
+    VCC (x): 8.00
+    E-P (β₀-β₁): 8
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 4
+  N2v (segmentos verticales): 4
+  N2d (segmentos diagonales): 7
+  X = (N2h - N2v)/4: 0.00
+  Código binario: 000011000011000021
+
+  Dirección Horizontal:
+    Número de segmentos: 4
+    Longitud media: 27.50
+    Longitud máxima: 42
+    Distribución de longitudes: 22, 33, 13, 42
+
+  Dirección Vertical:
+    Número de segmentos: 4
+    Longitud media: 16.50
+    Longitud máxima: 26
+    Distribución de longitudes: 19, 7, 14, 26
+
+  Dirección Diagonal:
+    Número de segmentos: 7
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 15
+    Longitud media global: 15.00
+    Longitud máxima global: 42
+    Ratio direccional: 1.75
+
+==================================================
+
+CASO: asymmetric_branches
+------------------------------
+Números de Betti:
+  β₀ (Componentes conectados): 1
+  β₁ (Agujeros topológicos): 0
+
+Características de Euler:
+  χ = V - E + F = 1966 - 2947 + 982 = 1
+  χ = β₀ - β₁ = 1 - 0 = 1
+
+Análisis VCC (Vertex Correction Code):
+  N1 (vértices con una conexión): 40
+  N3 (vértices con tres conexiones): 36
+  N1 - N3: 4
+  x = (N1 - N3)/4: 1.00
+  Código binario: 001111001100
+  Verificación con Euler-Poincaré:
+    VCC (x): 1.00
+    E-P (β₀-β₁): 1
+    Diferencia: 0.000000
+    Consistencia: ✓
+
+Análisis 3OT (Three Orthogonal Topology):
+  N2h (segmentos horizontales): 12
+  N2v (segmentos verticales): 16
+  N2d (segmentos diagonales): 74
+  X = (N2h - N2v)/4: -1.00
+  Código binario: 000110000121002202
+
+  Dirección Horizontal:
+    Número de segmentos: 12
+    Longitud media: 44.50
+    Longitud máxima: 95
+    Distribución de longitudes: 32, 31, 63, 63, 48, 47, 95, 31, 21, 20, 41, 42
+
+  Dirección Vertical:
+    Número de segmentos: 16
+    Longitud media: 27.44
+    Longitud máxima: 64
+    Distribución de longitudes: 16, 15, 16, 15, 16, 15, 64, 63, 63, 63, 16, 15, 16, 15, 16, 15
+
+  Dirección Diagonal:
+    Número de segmentos: 74
+    Longitud media: 1.00
+    Longitud máxima: 1
+    Distribución de longitudes: 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+
+  Métricas Combinadas 3OT:
+    Total de segmentos: 102
+    Longitud media global: 24.31
+    Longitud máxima global: 95
+    Ratio direccional: 6.17
 
 ==================================================
 

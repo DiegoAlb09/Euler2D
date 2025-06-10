@@ -92,5 +92,35 @@ TOPOLOGY_CASES = {
         'expected_beta0': 1,
         'expected_beta1': 5,
         'expected_euler': -4
+    },
+    'horizontal_dominant': {
+        'description': 'Estructura con dominancia horizontal',
+        'expected_beta0': 1,
+        'expected_beta1': 0,
+        'expected_euler': 1
+    },
+    'vertical_dominant': {
+        'description': 'Estructura con dominancia vertical',
+        'expected_beta0': 1,
+        'expected_beta1': 0,
+        'expected_euler': 1
+    },
+    'asymmetric_mesh': {
+        'description': 'Malla asimétrica con más segmentos horizontales',
+        'expected_beta0': 1,
+        'expected_beta1': 4,
+        'expected_euler': -3
+    },
+    'asymmetric_spiral': {
+        'description': 'Espiral asimétrica con segmentos variables',
+        'expected_beta0': 1,
+        'expected_beta1': 0,
+        'expected_euler': 1
+    },
+    'asymmetric_branches': {
+        'description': 'Estructura ramificada asimétrica',
+        'expected_beta0': 1,
+        'expected_beta1': 0,
+        'expected_euler': 1
     }
 }
