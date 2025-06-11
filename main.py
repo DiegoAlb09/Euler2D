@@ -2,6 +2,7 @@ import os
 import sys
 import numpy as np
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 # Añadir el directorio actual al path para importar módulos
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -10,9 +11,118 @@ from generator.field_generator import generate_topology_case, generate_vector_fi
 from generator.topology_metrics import compute_all_metrics, analyze_connectivity
 from generator.visualizer import (plot_topology_analysis, create_comparison_plot, 
                                  create_individual_case_visualization, 
-                                 save_metrics_to_csv, create_summary_report)
+                                 save_metrics_to_csv, create_summary_report,
+                                 plot_vector_field_enhanced, plot_topology_codes, plot_topology_patterns)
 from generator.case_definitions import get_topology_cases, validate_case_topology
-from config.topology_config import IMAGE_CONFIG
+from generator.image_reader import read_binary_image, validate_binary_image, preprocess_binary_image
+from generator.topology_codes_extended import get_f8_code, f8_to_f4, normalize_code_length, verify_euler_equalities
+from generator.topology_codes import compute_vcc, compute_3ot
+from config.topology_config import IMAGE_CONFIG, VISUALIZATION_CONFIG
+
+def analyze_binary_image(image_path):
+    """
+    Analiza una imagen binaria y calcula todos los códigos y métricas topológicas.
+    
+    Args:
+        image_path: Ruta a la imagen binaria
+        
+    Returns:
+        dict: Resultados del análisis
+    """
+    # Normalizar la ruta del archivo
+    image_path = os.path.abspath(os.path.normpath(image_path))
+    
+    print(f"\nAnalizando imagen: {image_path}")
+    print("=" * 50)
+    
+    # Verificar que el archivo existe
+    if not os.path.exists(image_path):
+        raise ValueError(f"La imagen no existe en la ruta: {image_path}")
+    
+    print(f"Ruta absoluta normalizada: {image_path}")
+    print(f"Directorio actual: {os.getcwd()}")
+    
+    # Leer y preprocesar imagen
+    try:
+        binary_image = read_binary_image(image_path)
+        print("Imagen leída correctamente")
+        print(f"Dimensiones de la imagen: {binary_image.shape}")
+    except Exception as e:
+        print(f"Error al leer la imagen: {str(e)}")
+        raise
+    
+    if not validate_binary_image(binary_image):
+        raise ValueError("La imagen no es válida para análisis topológico")
+    
+    print("Imagen validada correctamente")
+    binary_image = preprocess_binary_image(binary_image)
+    print("Imagen preprocesada correctamente")
+    
+    # Generar campo vectorial
+    u, v = generate_vector_field(binary_image)
+    
+    # Calcular métricas topológicas básicas
+    metrics = compute_all_metrics(binary_image)
+    connectivity = analyze_connectivity(binary_image)
+    
+    # Generar códigos en secuencia F8 -> F4 -> VCC -> 3OT
+    f8_code = get_f8_code(binary_image)
+    f4_code = f8_to_f4(f8_code)
+    
+    # Calcular VCC a partir de F4
+    vcc_results = compute_vcc(binary_image, f4_code)
+    metrics['vcc'] = vcc_results
+    vcc_code = vcc_results['code_string']
+    
+    # Calcular 3OT a partir de VCC
+    ot3_results = compute_3ot(binary_image, vcc_code)
+    metrics['3ot'] = ot3_results
+    ot3_code = ot3_results['code_string']
+    
+    # Verificar igualdades
+    equalities = verify_euler_equalities(metrics)
+    
+    # Preparar resultado
+    result = {
+        'binary_image': binary_image,
+        'vector_field': (u, v),
+        'metrics': metrics,
+        'connectivity': connectivity,
+        'codes': {
+            'f8': f8_code,
+            'f4': f4_code,
+            'vcc': vcc_code,
+            'ot3': ot3_code
+        },
+        'equalities': equalities
+    }
+    
+    # Mostrar resultados
+    print("\nCódigos Topológicos:")
+    print(f"  F8: {f8_code}")
+    print(f"  F4: {f4_code}")
+    print(f"  VCC: {vcc_code}")
+    print(f"  3OT: {ot3_code}")
+    
+    print("\nMétricas Principales:")
+    print(f"  β₀ (Componentes) = {metrics['beta0']}")
+    print(f"  β₁ (Agujeros) = {metrics['beta1']}")
+    print(f"  χ (V-E+F) = {metrics['euler_vef']}")
+    print(f"  χ (β₀-β₁) = {metrics['euler_poincare']}")
+    print(f"  VCC (N1-N3)/4 = {metrics['vcc']['x']:.2f}")
+    print(f"  3OT (N2h-N2v)/4 = {metrics['3ot']['combined']['X_value']:.2f}")
+    
+    print("\nVerificación de Igualdades:")
+    for name, value in equalities['verificaciones'].items():
+        print(f"  {name}: {'✓' if value else '✗'}")
+    print(f"  Todas las igualdades se cumplen: {'✓' if equalities['todas_igualdades_cumplen'] else '✗'}")
+    
+    if not equalities['todas_igualdades_cumplen']:
+        print("\nDiferencias encontradas:")
+        for name, value in equalities['diferencias'].items():
+            print(f"  {name}: {value:.6f}")
+    
+    return result
 
 def process_topology_case(case_name, size=None, seed=42):
     """
@@ -140,10 +250,7 @@ def save_results(results, output_dir):
     """
     # Crear directorios
     os.makedirs(output_dir, exist_ok=True)
-    os.makedirs(f"{output_dir}/images", exist_ok=True)
-    os.makedirs(f"{output_dir}/individual", exist_ok=True)
-    os.makedirs(f"{output_dir}/metrics", exist_ok=True)
-    os.makedirs(f"{output_dir}/comparison", exist_ok=True)
+    os.makedirs(f"{output_dir}/cases", exist_ok=True)
     
     print(f"Guardando resultados en: {output_dir}")
     
@@ -151,28 +258,16 @@ def save_results(results, output_dir):
     for result in results:
         case_name = result['name']
         field = result['field']
-        u, v = result['vector_field']
-        metrics = result['metrics']
         
-        # Análisis completo individual
-        save_path = f"{output_dir}/individual/complete_{case_name}.png"
-        plot_topology_analysis(field, u, v, metrics, save_path, case_name)
-        
-        # Visualizaciones detalladas
-        case_dir = f"{output_dir}/individual/{case_name}"
-        create_individual_case_visualization(field, u, v, metrics, case_name, case_dir)
-    
-    # Guardar comparación general
-    comparison_path = f"{output_dir}/comparison/topology_comparison.png"
-    create_comparison_plot(results, comparison_path)
-    
-    # Guardar métricas en CSV
-    csv_path = f"{output_dir}/metrics/topology_metrics.csv"
-    save_metrics_to_csv(results, csv_path)
-    
-    # Crear reporte resumen
-    report_path = f"{output_dir}/metrics/topology_report.txt"
-    create_summary_report(results, report_path)
+        # Guardar solo la imagen de la topología
+        plt.figure(figsize=(8, 8))
+        plt.imshow(field, cmap='gray', origin='lower')
+        plt.axis('off')  # Quitar ejes
+        plt.savefig(f'{output_dir}/cases/{case_name}.png', 
+                    dpi=VISUALIZATION_CONFIG['dpi'], 
+                    bbox_inches='tight',
+                    pad_inches=0)  # Quitar padding
+        plt.close()
     
     print("Resultados guardados exitosamente!")
 
@@ -214,59 +309,71 @@ def print_validation_summary(validation_summary):
 
 def main():
     """Función principal del programa"""
-    print("ANÁLISIS TOPOLÓGICO 2D - FÓRMULAS DE EULER")
+    print("ANÁLISIS TOPOLÓGICO 2D - CÓDIGOS Y FÓRMULAS DE EULER")
     print("="*60)
     print(f"Fecha de ejecución: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Directorio de trabajo: {os.getcwd()}")
     print()
     
     # Configuración
     output_dir = "output"
-    image_size = IMAGE_CONFIG['default_size']
-    seed = 42  # Para reproducibilidad
+    os.makedirs(output_dir, exist_ok=True)
     
-    # Obtener casos de topología definidos
-    topology_cases = get_topology_cases()
-    case_names = list(topology_cases.keys())
-    
-    print(f"Casos a procesar: {len(case_names)}")
-    print(f"Tamaño de imagen: {image_size}")
-    print(f"Semilla: {seed}")
-    print()
-    
-    # Procesar todos los casos
-    results = []
-    
-    for case_name in case_names:
+    # Procesar imagen de ejemplo o casos predefinidos
+    if len(sys.argv) > 1:
+        # Analizar imagen proporcionada
+        image_path = sys.argv[1]
         try:
-            result = process_topology_case(case_name, image_size, seed)
-            results.append(result)
+            # Convertir a ruta absoluta y normalizada
+            image_path = os.path.abspath(os.path.normpath(image_path))
+            print(f"Procesando imagen: {image_path}")
+            
+            result = analyze_binary_image(image_path)
+            
+            # Obtener nombre base para los archivos de salida
+            base_name = os.path.splitext(os.path.basename(image_path))[0]
+            
+            # Guardar análisis general
+            output_path = os.path.join(output_dir, f"{base_name}_analysis.png")
+            print(f"Guardando análisis general en: {output_path}")
+            plot_topology_analysis(
+                result['binary_image'],
+                result['vector_field'][0],
+                result['vector_field'][1],
+                result['metrics'],
+                output_path,
+                base_name
+            )
+            
+            # Guardar visualización de códigos
+            codes_path = os.path.join(output_dir, f"{base_name}_codes.png")
+            print(f"Guardando visualización de códigos en: {codes_path}")
+            plot_topology_codes(
+                result['codes'],
+                codes_path,
+                base_name
+            )
+            
+            # Guardar patrones generados
+            patterns_path = os.path.join(output_dir, f"{base_name}_patterns.png")
+            print(f"Guardando patrones topológicos en: {patterns_path}")
+            plot_topology_patterns(
+                result['codes'],
+                patterns_path,
+                base_name
+            )
+            
+            print("Análisis completado exitosamente")
+            
         except Exception as e:
-            print(f"Error procesando {case_name}: {str(e)}")
-            continue
-    
-    # Validar resultados
-    validation_summary = validate_all_cases(results)
-    print_validation_summary(validation_summary)
-    
-    # Guardar todos los resultados
-    if results:
-        save_results(results, output_dir)
-        
-        # Mostrar casos problemáticos si los hay
-        problematic_cases = [r for r in results if not r['metrics']['is_consistent']]
-        if problematic_cases:
-            print(f"\nCasos con inconsistencia en fórmulas de Euler:")
-            for case in problematic_cases:
-                metrics = case['metrics']
-                print(f"  {case['name']}: V-E+F={metrics['euler_vef']}, β₀-β₁={metrics['euler_poincare']}")
-        
-        invalid_cases = [r for r in results if not r['validation']]
-        if invalid_cases:
-            print(f"\nCasos que no coinciden con la topología esperada:")
-            for case in invalid_cases:
-                print(f"  {case['name']}")
-    
-    print(f"\nAnálisis completado. Revisa los archivos en: {output_dir}/")
+            print(f"Error procesando imagen: {str(e)}")
+            import traceback
+            print("Detalles del error:")
+            traceback.print_exc()
+    else:
+        print("Por favor proporciona una ruta a una imagen binaria como argumento.")
+        print("Ejemplo: python main.py ruta/a/tu/imagen.png")
+        sys.exit(1)
 
 if __name__ == "__main__":
     # Configurar numpy para reproducibilidad

@@ -4,6 +4,7 @@ from skimage.morphology import skeletonize
 from skimage.measure import regionprops
 from .topology_base import compute_betti_numbers_2d
 from .topology_codes import compute_vcc, compute_3ot
+from .topology_codes_extended import get_f8_code, f8_to_f4
 
 def count_vertices_edges_faces_corrected(binary_image):
     """
@@ -178,11 +179,16 @@ def compute_all_metrics(binary_image):
     metrics['area_fraction'] = np.sum(binary_image > 0.5) / binary_image.size
     metrics['perimeter'] = compute_perimeter(binary_image)
     
+    # Generar códigos en secuencia F8 -> F4 -> VCC -> 3OT
+    f8_code = get_f8_code(binary_image)
+    f4_code = f8_to_f4(f8_code)
+    
     # Añadir códigos topológicos
-    vcc_results = compute_vcc(binary_image)
+    vcc_results = compute_vcc(binary_image, f4_code)
     metrics['vcc'] = vcc_results
     
-    ot3_results = compute_3ot(binary_image)
+    # Calcular 3OT a partir de VCC
+    ot3_results = compute_3ot(binary_image, vcc_results['code_string'])
     metrics['3ot'] = ot3_results
     
     return metrics
