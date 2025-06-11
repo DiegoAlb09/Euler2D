@@ -1,141 +1,136 @@
-# Euler2D
+# Análisis Topológico 2D
 
-Euler2D es una biblioteca Python para el análisis topológico de imágenes 2D utilizando la característica de Euler y otros descriptores topológicos avanzados.
-
-## Características Principales
-
-- **Análisis Topológico Completo**
-  - Cálculo de números de Betti (β₀, β₁)
-  - Característica de Euler por dos métodos: V-E+F y β₀-β₁
-  - Validación de consistencia entre fórmulas
-  - Análisis de conectividad y componentes
-
-- **Códigos Topológicos Avanzados**
-  - VCC (Vertex Correction Code)
-    - Análisis de vértices con una y tres conexiones
-    - Verificación de consistencia con Euler-Poincaré
-  - 3OT (Three Orthogonal Topology)
-    - Análisis de segmentos horizontales, verticales y diagonales
-    - Métricas direccionales y ratios de asimetría
-
-- **Generación de Patrones**
-  - Casos predefinidos con topologías específicas
-  - Generación de blobs y agujeros
-  - Patrones asimétricos y estructuras complejas
-  - Campo vectorial asociado
-
-- **Visualización Avanzada**
-  - Gráficos detallados de análisis topológico
-  - Visualización de campos vectoriales
-  - Comparativas entre casos
-  - Reportes y métricas detalladas
+Este sistema realiza análisis topológico de imágenes binarias 2D, calculando diversos códigos y métricas topológicas.
 
 ## Instalación
 
+1. Clonar el repositorio:
 ```bash
-# Clonar el repositorio
-git clone https://github.com/DiegoAlb09/Euler2D.git
+git clone <url-del-repositorio>
 cd Euler2D
-python main.py
-
-# Instalar dependencias
-pip install -r requirements.txt
 ```
 
-## Uso Básico
-
-```python
-from generator import generate_topology_case, compute_all_metrics
-
-# Generar un caso de topología
-field = generate_topology_case('single_blob')
-
-# Calcular métricas
-metrics = compute_all_metrics(field)
-
-print(f"β₀ = {metrics['beta0']}")  # Número de componentes
-print(f"β₁ = {metrics['beta1']}")  # Número de agujeros
-print(f"χ = {metrics['euler_poincare']}")  # Característica de Euler
+2. Instalar dependencias:
+```bash
+pip install numpy scipy matplotlib scikit-image
 ```
 
-## Casos de Topología Disponibles
+## Uso
 
-- `single_blob`: Blob único sin agujeros
-- `blob_with_hole`: Blob con un agujero
-- `blob_with_three_holes`: Blob con tres agujeros
-- `two_blobs`: Dos blobs separados
-- `two_blobs_one_hole`: Dos blobs, uno con agujero
-- `complex_topology`: Topología compleja con múltiples características
-- `irregular_star`: Forma de estrella irregular
-- `irregular_chain`: Cadena de blobs conectados
-- `irregular_mesh`: Malla irregular con agujeros
-- `irregular_clusters`: Clusters con conexiones
-- `spiral_holes`: Espiral con agujeros distribuidos
-- `horizontal_dominant`: Estructura con dominancia horizontal
-- `vertical_dominant`: Estructura con dominancia vertical
-- `asymmetric_mesh`: Malla asimétrica
-- `asymmetric_spiral`: Espiral asimétrica
-- `asymmetric_branches`: Estructura ramificada asimétrica
+El sistema puede analizar imágenes binarias de dos formas:
+
+1. Análisis de imagen individual:
+```bash
+python main.py ruta/a/tu/imagen.png
+```
+
+2. Generación y análisis de casos predefinidos:
+```bash
+python main.py --generate-cases
+```
+
+## Cálculos y Métricas
+
+### 1. Códigos Topológicos
+
+#### Código F8 (Freeman 8-direcciones)
+- Recorre el contorno de la imagen siguiendo 8 direcciones posibles
+- Cada número representa una dirección (0-7)
+- Se genera analizando los 8 vecinos de cada píxel del contorno
+
+#### Código F4 (Freeman 4-direcciones)
+- Simplificación del F8 a 4 direcciones principales
+- Conversión de F8 a F4:
+  - 0,1 → 0 (derecha)
+  - 2,3 → 1 (arriba)
+  - 4,5 → 2 (izquierda)
+  - 6,7 → 3 (abajo)
+
+#### Código VCC (Vertex Correction Code)
+- Basado en la secuencia de píxeles del código F4
+- Representa los vértices y sus conexiones:
+  - 0: No hay cambio de dirección
+  - 1: Vértice con una conexión
+  - 3: Vértice con tres conexiones
+- Fórmula: x = (N1 - N3)/4 = β₀ - β₁
+
+#### Código 3OT (Three Orthogonal Topology)
+- Derivado del código VCC
+- Representa la dirección de cada segmento:
+  - 0 (h): Segmento horizontal
+  - 1 (v): Segmento vertical
+  - 2 (d): Segmento diagonal
+- Fórmula: X = (N2h - N2v)/4 = β₀ - β₁
+
+### 2. Números de Betti
+
+- β₀: Número de componentes conectadas
+- β₁: Número de agujeros
+- Calculados usando análisis de componentes conectadas
+
+### 3. Fórmulas de Euler
+
+#### Característica de Euler (V-E+F)
+- V: Número de vértices
+- E: Número de aristas
+- F: Número de caras
+- χ = V - E + F
+
+#### Euler-Poincaré (β₀-β₁)
+- Relaciona los números de Betti
+- χ = β₀ - β₁
+
+### 4. Verificaciones
+
+El sistema verifica la consistencia entre:
+1. Fórmulas de Euler: V-E+F = β₀-β₁
+2. VCC: x = (N1-N3)/4 = β₀-β₁
+3. 3OT: X = (N2h-N2v)/4 = β₀-β₁
 
 ## Estructura del Proyecto
 
 ```
 Euler2D/
+├── main.py                 # Punto de entrada principal
 ├── config/
-│   └── topology_config.py    # Configuraciones y parámetros
+│   └── topology_config.py  # Configuración general
 ├── generator/
-│   ├── __init__.py          # Exportación de módulos
-│   ├── field_generator.py    # Generación de campos
-│   ├── topology_metrics.py   # Cálculo de métricas
-│   ├── topology_codes.py     # Códigos VCC y 3OT
-│   ├── case_definitions.py   # Definición de casos
-│   └── visualizer.py        # Visualización y reportes
-└── main.py                  # Script principal
+│   ├── field_generator.py  # Generación de casos
+│   ├── topology_codes.py   # Implementación de códigos
+│   ├── topology_metrics.py # Cálculo de métricas
+│   └── visualizer.py       # Visualización de resultados
+└── output/                 # Directorio de salida
 ```
+
+## Visualizaciones
+
+El sistema genera tres tipos de visualizaciones:
+1. Análisis topológico general
+2. Códigos topológicos (F8, F4, VCC, 3OT)
+3. Patrones generados por cada código
 
 ## Ejemplos de Uso
 
-### Análisis Completo de un Caso
-
+1. Analizar una imagen binaria:
 ```python
-from main import process_topology_case
+from main import analyze_binary_image
 
-# Procesar un caso específico
-result = process_topology_case('complex_topology')
-
-# Los resultados incluyen:
-# - Campo escalar y vectorial
-# - Métricas topológicas
-# - Códigos VCC y 3OT
-# - Análisis de conectividad
+result = analyze_binary_image("ruta/imagen.png")
+print(f"Números de Betti: β₀={result['metrics']['beta0']}, β₁={result['metrics']['beta1']}")
 ```
 
-### Generación de Reportes
-
+2. Generar y analizar un caso específico:
 ```python
-from main import save_results
+from generator.field_generator import generate_topology_case
 
-# Procesar múltiples casos y guardar resultados
-results = [process_topology_case(case) for case in cases]
-save_results(results, 'output_directory')
-
-# Genera:
-# - Visualizaciones individuales
-# - Gráficos comparativos
-# - Métricas en CSV
-# - Reporte detallado
+field = generate_topology_case("single_blob", size=(256, 256))
+result = analyze_binary_image(field)
 ```
 
-## Contribuir
-
-Las contribuciones son bienvenidas. Por favor, sigue estos pasos:
+## Contribución
 
 1. Fork el repositorio
-2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`)
-3. Realiza tus cambios y haz commit (`git commit -am 'Añade nueva característica'`)
-4. Push a la rama (`git push origin feature/nueva-caracteristica`)
+2. Crea una rama para tu feature (`git checkout -b feature/nombre`)
+3. Commit tus cambios (`git commit -am 'Añadir nueva feature'`)
+4. Push a la rama (`git push origin feature/nombre`)
 5. Crea un Pull Request
-
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
