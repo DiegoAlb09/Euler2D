@@ -17,6 +17,7 @@ from generator.topology_codes_extended import (get_f8_code, f8_to_f4, compute_vc
                                             normalize_code_length, verify_euler_equalities)
 from generator.case_definitions import get_topology_cases, validate_case_topology
 from generator.image_reader import read_binary_image, validate_binary_image, preprocess_binary_image
+from generator.test_images import get_test_images, visualizar_imagenes_prueba
 from config.topology_config import IMAGE_CONFIG, VISUALIZATION_CONFIG
 
 def analyze_binary_image(image_path):
@@ -115,7 +116,6 @@ def analyze_binary_image(image_path):
     print("\nVerificación de Igualdades:")
     for name, value in equalities['verificaciones'].items():
         print(f"  {name}: {'✓' if value else '✗'}")
-    print(f"  Todas las igualdades se cumplen: {'✓' if equalities['todas_igualdades_cumplen'] else '✗'}")
     
     if not equalities['todas_igualdades_cumplen']:
         print("\nDiferencias encontradas:")
@@ -124,284 +124,117 @@ def analyze_binary_image(image_path):
     
     return result
 
-def process_topology_case(case_name, size=None, seed=42):
+def analyze_test_images():
     """
-    Procesa un caso individual de topología
-    
-    Args:
-        case_name: Nombre del caso a procesar
-        size: Tamaño de la imagen (por defecto desde config)
-        seed: Semilla para reproducibilidad
-        
-    Returns:
-        dict: Diccionario con todos los datos del caso
+    Analiza todas las imágenes de prueba y guarda los resultados.
     """
-    if size is None:
-        size = IMAGE_CONFIG['default_size']
-    
-    print(f"\nProcesando caso: {case_name}")
-    print("=" * 50)
-    
-    # Generar campo con topología específica
-    field = generate_topology_case(case_name, size, seed)
-    
-    # Generar campo vectorial
-    u, v = generate_vector_field(field)
-    
-    # Calcular métricas topológicas
-    metrics = compute_all_metrics(field)
-    connectivity = analyze_connectivity(field)
-    
-    # Validar topología esperada
-    validation = validate_case_topology(case_name, metrics)
-    
-    # Preparar resultado
-    result = {
-        'name': case_name,
-        'field': field,
-        'vector_field': (u, v),
-        'metrics': metrics,
-        'connectivity': connectivity,
-        'validation': validation,
-        'size': size,
-        'seed': seed
-    }
-    
-    # Mostrar métricas principales y conclusiones
-    print("\nMétricas Principales:")
-    print(f"  β₀ (Componentes) = {metrics['beta0']}")
-    print(f"  β₁ (Agujeros) = {metrics['beta1']}")
-    print(f"  χ (V-E+F) = {metrics['euler_vef']}")
-    print(f"  χ (β₀-β₁) = {metrics['euler_poincare']}")
-    
-    # Mostrar códigos generados y verificaciones
-    print("\nCódigos Topológicos:")
-    print(f"  VCC: {metrics['vcc']['code_string']}")
-    print(f"  3OT: {metrics['3ot']['code_string']}")
-    
-    # Verificación de relaciones
-    vcc = metrics['vcc']
-    ot3 = metrics['3ot']
-    
-    print("\nVerificación de Relaciones:")
-    print("  VCC:")
-    print(f"    x = (N1 - N3)/4 = {vcc['x']:.2f}")
-    print(f"    χ (β₀-β₁) = {metrics['euler_poincare']}")
-    print(f"    ¿Coinciden? {'✓' if vcc['is_consistent'] else '✗'}")
-    print(f"    Diferencia: {abs(vcc['x'] - metrics['euler_poincare']):.6f}")
-    
-    print("\n  3OT:")
-    print(f"    X = (N2h - N2v)/4 = {ot3['combined']['X_value']:.2f}")
-    print(f"    χ (β₀-β₁) = {metrics['euler_poincare']}")
-    print(f"    ¿Coinciden? {'✓' if ot3['combined']['is_consistent'] else '✗'}")
-    print(f"    Diferencia: {ot3['combined']['difference']:.6f}")
-    
-    # Mostrar conclusiones
-    print("\nConclusiones del Análisis:")
-    
-    # 1. Validación de fórmulas de Euler
-    if metrics['is_consistent']:
-        print("✓ Las fórmulas de Euler son consistentes:")
-        print(f"  V-E+F = β₀-β₁ = {metrics['euler_poincare']}")
-    else:
-        print("✗ Inconsistencia en las fórmulas de Euler:")
-        print(f"  V-E+F = {metrics['euler_vef']} ≠ β₀-β₁ = {metrics['euler_poincare']}")
-    
-    # 2. Validación de VCC
-    if vcc['is_consistent']:
-        print("✓ El código VCC coincide con Euler-Poincaré:")
-        print(f"  VCC(x) = {vcc['x']:.2f} ≈ χ = {metrics['euler_poincare']}")
-    else:
-        print("✗ Discrepancia entre VCC y Euler-Poincaré:")
-        print(f"  VCC(x) = {vcc['x']:.2f} ≠ χ = {metrics['euler_poincare']}")
-    
-    # 3. Validación de 3OT
-    if ot3['combined']['is_consistent']:
-        print("✓ El código 3OT coincide con Euler-Poincaré:")
-        print(f"  3OT(X) = {ot3['combined']['X_value']:.2f} ≈ χ = {metrics['euler_poincare']}")
-    else:
-        print("✗ Discrepancia entre 3OT y Euler-Poincaré:")
-        print(f"  3OT(X) = {ot3['combined']['X_value']:.2f} ≠ χ = {metrics['euler_poincare']}")
-    
-    # 4. Análisis direccional (3OT)
-    print("\nAnálisis direccional (3OT):")
-    print(f"  Horizontal (N2h): {ot3['N2h']} segmentos")
-    print(f"  Vertical (N2v): {ot3['N2v']} segmentos")
-    print(f"  Diagonal (N2d): {ot3['N2d']} segmentos")
-    print(f"  X = (N2h - N2v)/4 = {ot3['combined']['X_value']:.2f}")
-    
-    # 5. Validación con caso esperado
-    if validation:
-        print("\n✓ La topología coincide con lo esperado")
-    else:
-        print("\n✗ La topología no coincide con lo esperado")
-    
-    print("\n" + "-" * 50)
-    
-    return result
-
-def save_results(results, output_dir):
-    """
-    Guarda todos los resultados en archivos organizados
-    
-    Args:
-        results: Lista de resultados de casos
-        output_dir: Directorio base de salida
-    """
-    # Crear directorios
+    # Crear directorios de salida
+    output_dir = "output"
+    test_images_dir = "test_images"
     os.makedirs(output_dir, exist_ok=True)
-    os.makedirs(f"{output_dir}/cases", exist_ok=True)
+    os.makedirs(test_images_dir, exist_ok=True)
     
-    print(f"Guardando resultados en: {output_dir}")
+    # Obtener imágenes de prueba
+    imagenes = get_test_images()
     
-    # Guardar visualizaciones individuales
-    for result in results:
-        case_name = result['name']
-        field = result['field']
+    print("\nANÁLISIS TOPOLÓGICO DE IMÁGENES DE PRUEBA")
+    print("=" * 80)
+    print(f"Fecha de ejecución: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Total de imágenes a analizar: {len(imagenes)}")
+    print()
+    
+    # Lista para almacenar resultados
+    resultados = []
+    
+    # Analizar cada imagen
+    for nombre, imagen in imagenes.items():
+        print(f"\nAnalizando: {nombre}")
+        print("-" * 80)
         
-        # Guardar solo la imagen de la topología
-        plt.figure(figsize=(8, 8))
-        plt.imshow(field, cmap='gray', origin='lower')
-        plt.axis('off')  # Quitar ejes
-        plt.savefig(f'{output_dir}/cases/{case_name}.png', 
-                    dpi=VISUALIZATION_CONFIG['dpi'], 
-                    bbox_inches='tight',
-                    pad_inches=0)  # Quitar padding
-        plt.close()
-    
-    print("Resultados guardados exitosamente!")
-
-def validate_all_cases(results):
-    """
-    Valida la consistencia de todos los casos procesados
-    
-    Args:
-        results: Lista de resultados
+        # Guardar imagen en test_images
+        imagen_path = os.path.join(test_images_dir, f"{nombre}.png")
+        plt.imsave(imagen_path, imagen, cmap='gray')
         
-    Returns:
-        dict: Resumen de validación
-    """
-    total_cases = len(results)
-    consistent_euler = sum(1 for r in results if r['metrics']['is_consistent'])
-    valid_topology = sum(1 for r in results if r['validation'])
+        # Generar campo vectorial
+        u, v = generate_vector_field(imagen)
+        
+        # Calcular métricas
+        metrics = compute_all_metrics(imagen)
+        connectivity = analyze_connectivity(imagen)
+        
+        # Generar códigos
+        f8_code = get_f8_code(imagen)
+        f4_code = f8_to_f4(f8_code)
+        vcc_results = compute_vcc(imagen, f4_code)
+        ot3_results = compute_3ot(imagen, vcc_results['code_string'])
+        
+        # Verificar igualdades
+        equalities = verify_euler_equalities(metrics)
+        
+        # Guardar resultado
+        resultado = {
+            'name': nombre,
+            'field': imagen,
+            'vector_field': (u, v),
+            'metrics': metrics,
+            'connectivity': connectivity,
+            'codes': {
+                'f8': f8_code,
+                'f4': f4_code,
+                'vcc': vcc_results['code_string'],
+                'ot3': ot3_results['code_string']
+            },
+            'equalities': equalities
+        }
+        resultados.append(resultado)
+        
+        # Mostrar análisis detallado
+        print(f"Píxeles: {np.sum(imagen)}")
+        print(f"Vértices (V): {metrics['vertices']}")
+        print(f"Aristas (E): {metrics['edges']}")
+        print(f"Caras (F): {metrics['faces']}")
+        print(f"Componentes (N): {metrics['beta0']}")
+        print(f"Agujeros (H): {metrics['beta1']}")
+        print("\nCódigos Topológicos:")
+        print(f"  F8: {f8_code}")
+        print(f"  F4: {f4_code}")
+        print(f"  VCC: {vcc_results['code_string']}")
+        print(f"  3OT: {ot3_results['code_string']}")
+        print("\nAnálisis VCC:")
+        print(f"  N1: {metrics['vcc']['N1']}")
+        print(f"  N3: {metrics['vcc']['N3']}")
+        print(f"  x = (N1 - N3)/4: {metrics['vcc']['x']:.2f}")
+        print("\nAnálisis 3OT:")
+        print(f"  N2h: {metrics['3ot']['N2h']}")
+        print(f"  N2v: {metrics['3ot']['N2v']}")
+        print(f"  N2d: {metrics['3ot']['N2d']}")
+        print(f"  X = (N2h - N2v)/4: {metrics['3ot']['combined']['X_value']:.2f}")
+        print("\nCaracterísticas de Euler:")
+        print(f"  χ = V - E + F = {metrics['euler_vef']:.2f}")
+        print(f"  χ = N - H = {metrics['euler_poincare']:.2f}")
+        print(f"  χ = (N1 - N3)/4 = {metrics['vcc']['x']:.2f}")
+        print(f"  χ = (N2h - N2v)/4 = {metrics['3ot']['combined']['X_value']:.2f}")
+        print("\nVerificación de igualdades:")
+        for name, value in equalities['verificaciones'].items():
+            print(f"  {name}: {'✓' if value else '✗'}")
     
-    validation_summary = {
-        'total_cases': total_cases,
-        'consistent_euler_formulas': consistent_euler,
-        'valid_expected_topology': valid_topology,
-        'euler_consistency_rate': consistent_euler / total_cases if total_cases > 0 else 0,
-        'topology_validation_rate': valid_topology / total_cases if total_cases > 0 else 0
-    }
+    # Guardar métricas en CSV
+    save_metrics_to_csv(resultados, os.path.join(output_dir, "metricas.csv"))
     
-    return validation_summary
-
-def print_validation_summary(validation_summary):
-    """Imprime un resumen de la validación"""
-    print("\n" + "="*60)
-    print("RESUMEN DE VALIDACIÓN")
-    print("="*60)
-    print(f"Total de casos procesados: {validation_summary['total_cases']}")
-    print(f"Casos con fórmulas de Euler consistentes: {validation_summary['consistent_euler_formulas']}")
-    print(f"Casos con topología esperada válida: {validation_summary['valid_expected_topology']}")
-    print(f"Tasa de consistencia de Euler: {validation_summary['euler_consistency_rate']:.2%}")
-    print(f"Tasa de validación topológica: {validation_summary['topology_validation_rate']:.2%}")
-    print("="*60)
+    print("\nAnálisis completado exitosamente!")
+    print(f"Los resultados se encuentran en el directorio: {os.path.abspath(output_dir)}")
+    print(f"Las imágenes se encuentran en el directorio: {os.path.abspath(test_images_dir)}")
 
 def main():
     """Función principal del programa"""
     print("ANÁLISIS TOPOLÓGICO 2D - CÓDIGOS Y FÓRMULAS DE EULER")
-    print("="*60)
+    print("=" * 60)
     print(f"Fecha de ejecución: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Directorio de trabajo: {os.getcwd()}")
     print()
     
-    # Configuración
-    output_dir = "output"
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Procesar imagen de ejemplo o casos predefinidos
-    if len(sys.argv) > 1:
-        # Analizar imagen proporcionada
-        image_path = sys.argv[1]
-        try:
-            # Convertir a ruta absoluta y normalizada
-            image_path = os.path.abspath(os.path.normpath(image_path))
-            print(f"Procesando imagen: {image_path}")
-            
-            # Leer imagen y asegurar que sea binaria
-            binary_image = read_binary_image(image_path)
-            print("Imagen leída correctamente")
-            print(f"Dimensiones de la imagen: {binary_image.shape}")
-            
-            # Obtener todos los códigos
-            f8_code = get_f8_code(binary_image)
-            f4_code = f8_to_f4(f8_code)
-            result = analyze_binary_image(image_path)
-            
-            # Mostrar información de los códigos
-            print("\nInformación de los códigos topológicos:")
-            print("-" * 40)
-            print(f"Código F8:")
-            print(f"  Longitud: {len(f8_code)} caracteres")
-            print(f"  Código: {f8_code}")
-            
-            print(f"\nCódigo F4:")
-            print(f"  Longitud: {len(f4_code)} caracteres")
-            print(f"  Código: {f4_code}")
-            
-            print(f"\nCódigo VCC:")
-            print(f"  Longitud: {len(result['codes']['vcc'])} caracteres")
-            print(f"  Código: {result['codes']['vcc']}")
-            
-            print(f"\nCódigo 3OT:")
-            print(f"  Longitud: {len(result['codes']['ot3'])} caracteres")
-            print(f"  Código: {result['codes']['ot3']}")
-            print("-" * 40)
-            
-            # Obtener nombre base para los archivos de salida
-            base_name = os.path.splitext(os.path.basename(image_path))[0]
-            
-            # Guardar análisis general
-            output_path = os.path.join(output_dir, f"{base_name}_analysis.png")
-            print(f"\nGuardando análisis general en: {output_path}")
-            plot_topology_analysis(
-                result['binary_image'],
-                result['vector_field'][0],
-                result['vector_field'][1],
-                result['metrics'],
-                output_path,
-                base_name
-            )
-            
-            # Guardar visualización de códigos
-            codes_path = os.path.join(output_dir, f"{base_name}_codes.png")
-            print(f"Guardando visualización de códigos en: {codes_path}")
-            plot_topology_codes(
-                result['codes'],
-                codes_path,
-                base_name
-            )
-            
-            # Guardar patrones generados
-            patterns_path = os.path.join(output_dir, f"{base_name}_patterns.png")
-            print(f"Guardando patrones topológicos en: {patterns_path}")
-            plot_topology_patterns(
-                result['codes'],
-                patterns_path,
-                base_name
-            )
-            
-            print("\nAnálisis completado exitosamente")
-            
-        except Exception as e:
-            print(f"Error procesando imagen: {str(e)}")
-            import traceback
-            print("Detalles del error:")
-            traceback.print_exc()
-    else:
-        print("Por favor proporciona una ruta a una imagen binaria como argumento.")
-        print("Ejemplo: python main.py ruta/a/tu/imagen.png")
-        sys.exit(1)
+    # Analizar imágenes de prueba
+    analyze_test_images()
 
 if __name__ == "__main__":
     # Configurar numpy para reproducibilidad

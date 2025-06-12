@@ -41,20 +41,26 @@ def get_f8_code(binary_image):
     # Asegurar que la imagen sea del tipo correcto
     binary_image = binary_image.astype(np.uint8) * 255
     
-    # Encontrar contornos
-    contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    # Encontrar contornos (tanto externos como internos)
+    contours, hierarchy = cv2.findContours(binary_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     
     # Si no hay contornos, retornar cadena vacía
     if not contours:
         return ''
     
-    # Obtener el código Freeman del contorno más grande
-    largest_contour = max(contours, key=cv2.contourArea)
-    f8_code = freeman_chain_code(largest_contour)
+    # Obtener el código Freeman para cada contorno
+    f8_codes = []
+    for i, contour in enumerate(contours):
+        # Verificar si es un contorno válido (área > 0)
+        if cv2.contourArea(contour) > 0:
+            code = freeman_chain_code(contour)
+            if code:  # Solo añadir códigos no vacíos
+                f8_codes.append(code)
     
-    return f8_code
+    # Unir todos los códigos en orden
+    return ''.join(f8_codes)
 
-def f8_to_f4(f8_code, metodo='aproximar'):
+def f8_to_f4(f8_code, metodo='filtrar'):
     """
     Convierte el código F8 a F4 usando un método específico de conversión.
     
@@ -210,12 +216,18 @@ def compute_vcc(binary_image, f4_code):
     
     def calcular_N1_N3(vcc):
         """
-        Calcula N1 y N3 según los tipos de giro.
-        N1: número de giros suaves (±1)
-        N3: número de giros bruscos (180°)
+        Calcula N1 y N3 según la definición:
+        - N1: número de vértices para el que VCC=1
+        - N3: número de vértices para el que VCC=2
+        
+        Args:
+            vcc: Lista de códigos VCC
+            
+        Returns:
+            tuple: (N1, N3) número de vértices con VCC=1 y VCC=2 respectivamente
         """
-        N1 = sum(1 for giro in vcc if giro in ['1', '-1'])  # giros de ±1
-        N3 = sum(1 for giro in vcc if giro == '2')          # giros de 180°
+        N1 = sum(1 for giro in vcc if giro == '1')  # Vértices con VCC=1
+        N3 = sum(1 for giro in vcc if giro == '2')  # Vértices con VCC=2
         return N1, N3
     
     # Generar el código VCC como lista
@@ -243,13 +255,135 @@ def compute_vcc(binary_image, f4_code):
         'code_string': vcc_code
     }
 
+def vcc_to_3ot(vcc_code):
+    """
+    Convierte código VCC a 3OT basado en la dirección de los segmentos.
+    El código 3OT clasifica los segmentos en:
+    H: horizontal (movimiento horizontal dominante)
+    V: vertical (movimiento vertical dominante)
+    D: diagonal (movimiento diagonal)
+    
+    Args:
+        vcc_code: Código VCC de la imagen
+        
+    Returns:
+        list: Lista de direcciones (H, V, D)
+    """
+    ot3 = []
+    # Determinar dirección inicial basada en el primer segmento
+    if vcc_code[0] == '0':  # Sin cambio
+        current_direction = 'H'
+    elif vcc_code[0] == '1':  # Giro izquierda
+        current_direction = 'V'
+    elif vcc_code[0] == '3':  # Giro derecha
+        current_direction = 'D'
+    else:  # Giro 180°
+        current_direction = 'H'
+    
+    ot3.append(current_direction)
+    
+    # Mapeo de transiciones de dirección
+    transitions = {
+        'H': {'0': 'H', '1': 'V', '3': 'D', '2': 'H'},  # Desde horizontal
+        'V': {'0': 'V', '1': 'D', '3': 'H', '2': 'V'},  # Desde vertical
+        'D': {'0': 'D', '1': 'H', '3': 'V', '2': 'D'}   # Desde diagonal
+    }
+    
+    # Procesar el resto del código
+    for i in range(1, len(vcc_code)):
+        vertex_type = vcc_code[i]
+        current_direction = transitions[current_direction][vertex_type]
+        ot3.append(current_direction)
+    
+    return ot3
+
+def calcular_N2h_N2v(ot3):
+    """
+    Calcula N2h y N2v según patrones específicos de segmentos.
+    La diferencia (N2h-N2v)/4 debe ser igual a la característica de Euler χ.
+    
+    N2h: número de patrones horizontales dominantes
+    - Patrones donde la dirección horizontal es predominante
+    - Contribuye positivamente a χ cuando hay más estructura horizontal
+    
+    N2v: número de patrones verticales dominantes
+    - Patrones donde la dirección vertical es predominante
+    - Contribuye negativamente a χ cuando hay más estructura vertical
+    
+    Args:
+        ot3: Lista de direcciones (H, V, D)
+        
+    Returns:
+        tuple: (N2h, N2v) número de patrones horizontales y verticales dominantes
+    """
+    N2h = 0
+    N2v = 0
+    
+    # Convertir la lista a string para facilitar el análisis
+    ot3_str = ''.join(ot3)
+    
+    # Patrones horizontales dominantes
+    patrones_h = [
+        'HVH',    # Horizontal-Vertical-Horizontal básico
+        'HDH',    # Horizontal-Diagonal-Horizontal
+        'HHVH',   # Horizontal-Horizontal-Vertical-Horizontal
+        'HHDH',   # Horizontal-Horizontal-Diagonal-Horizontal
+        'HVHH',   # Horizontal-Vertical-Horizontal-Horizontal
+        'HDHH',   # Horizontal-Diagonal-Horizontal-Horizontal
+        'HVHVH',  # Patrón alternado horizontal
+        'HDHDH'   # Patrón alternado horizontal con diagonales
+    ]
+    
+    # Patrones verticales dominantes
+    patrones_v = [
+        'VHV',    # Vertical-Horizontal-Vertical básico
+        'VDV',    # Vertical-Diagonal-Vertical
+        'VVHV',   # Vertical-Vertical-Horizontal-Vertical
+        'VVDV',   # Vertical-Vertical-Diagonal-Vertical
+        'VHVV',   # Vertical-Horizontal-Vertical-Vertical
+        'VDVV',   # Vertical-Diagonal-Vertical-Vertical
+        'VHVHV',  # Patrón alternado vertical
+        'VDVDV'   # Patrón alternado vertical con diagonales
+    ]
+    
+    # Contar patrones horizontales
+    for patron in patrones_h:
+        count = ot3_str.count(patron)
+        if patron in ['HVHVH', 'HDHDH']:
+            # Ajustar para patrones alternados
+            N2h += count // 2
+        else:
+            N2h += count
+    
+    # Contar patrones verticales
+    for patron in patrones_v:
+        count = ot3_str.count(patron)
+        if patron in ['VHVHV', 'VDVDV']:
+            # Ajustar para patrones alternados
+            N2v += count // 2
+        else:
+            N2v += count
+    
+    # Ajustar por superposición de patrones
+    N2h = max(0, N2h - ot3_str.count('HVHVHVH'))  # Evitar contar dos veces patrones superpuestos
+    N2v = max(0, N2v - ot3_str.count('VHVHVHV'))
+    
+    return N2h, N2v
+
 def compute_3ot(binary_image, vcc_code):
     """
     Calcula el código 3OT (Three Orthogonal Topology) a partir del código VCC.
     El código 3OT clasifica los segmentos en:
-    H: horizontal (antes '0')
-    V: vertical (antes '1')
-    D: diagonal (antes '2')
+    H: horizontal (movimiento horizontal dominante)
+    V: vertical (movimiento vertical dominante)
+    D: diagonal (movimiento diagonal)
+    
+    La característica de Euler χ se calcula como:
+    χ = (N2h - N2v)/4
+    
+    Donde:
+    - N2h: número de patrones horizontales dominantes
+    - N2v: número de patrones verticales dominantes
     
     Args:
         binary_image: Imagen binaria donde 1=material, 0=poro
@@ -258,58 +392,6 @@ def compute_3ot(binary_image, vcc_code):
     Returns:
         dict: Diccionario con los resultados del 3OT
     """
-    def vcc_to_3ot(vcc_code):
-        """Convierte código VCC a 3OT basado en la dirección de los segmentos"""
-        ot3 = []
-        current_direction = 'H'  # Empezamos asumiendo dirección horizontal
-        
-        for i in range(len(vcc_code)):
-            vertex_type = vcc_code[i]
-            
-            if vertex_type == '0':  # Sin cambio de dirección
-                ot3.append(current_direction)
-            elif vertex_type == '1':  # Giro a la izquierda
-                if current_direction == 'H':  # horizontal -> vertical
-                    current_direction = 'V'
-                elif current_direction == 'V':  # vertical -> diagonal
-                    current_direction = 'D'
-                else:  # diagonal -> horizontal
-                    current_direction = 'H'
-                ot3.append(current_direction)
-            elif vertex_type == '3':  # Giro a la derecha
-                if current_direction == 'H':  # horizontal -> diagonal
-                    current_direction = 'D'
-                elif current_direction == 'D':  # diagonal -> vertical
-                    current_direction = 'V'
-                else:  # vertical -> horizontal
-                    current_direction = 'H'
-                ot3.append(current_direction)
-            else:  # Giro 180° (tipo 2)
-                if current_direction == 'H':  # horizontal -> horizontal
-                    current_direction = 'H'
-                elif current_direction == 'V':  # vertical -> vertical
-                    current_direction = 'V'
-                else:  # diagonal -> diagonal
-                    current_direction = 'D'
-                ot3.append(current_direction)
-        
-        return ot3
-    
-    def calcular_N2h_N2v(ot3):
-        """
-        Calcula N2h y N2v según patrones específicos de tres segmentos.
-        N2h: número de patrones H-V-H (horizontal dominante)
-        N2v: número de patrones V-H-V (vertical dominante)
-        """
-        N2h = 0
-        N2v = 0
-        for i in range(1, len(ot3) - 1):
-            if ot3[i-1] == 'H' and ot3[i] == 'V' and ot3[i+1] == 'H':
-                N2h += 1
-            elif ot3[i-1] == 'V' and ot3[i] == 'H' and ot3[i+1] == 'V':
-                N2v += 1
-        return N2h, N2v
-    
     # Generar código 3OT como lista
     ot3_list = vcc_to_3ot(vcc_code)
     
@@ -326,7 +408,7 @@ def compute_3ot(binary_image, vcc_code):
     beta0, beta1 = compute_betti_numbers_2d(binary_image)
     euler_poincare = beta0 - beta1
     
-    # Convertir la lista 3OT a string para mantener compatibilidad con el formato anterior
+    # Convertir la lista 3OT a string para mantener compatibilidad
     ot3_code = ''.join('0' if x == 'H' else '1' if x == 'V' else '2' for x in ot3_list)
     
     # Información de segmentos por dirección

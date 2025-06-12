@@ -1,6 +1,6 @@
 import os
 import matplotlib.pyplot as plt
-from generator.test_images import get_test_images
+from generator.test_images import get_test_images, visualizar_imagenes_prueba
 
 def main():
     """
@@ -25,6 +25,13 @@ def main():
         # Guardar imagen
         plt.imsave(ruta_salida, imagen, cmap='gray')
         print(f"Imagen guardada: {ruta_salida}")
+    
+    # Crear visualización de todas las imágenes
+    fig = visualizar_imagenes_prueba(imagenes)
+    fig.savefig(os.path.join(output_dir, "todas_imagenes.png"), 
+                dpi=300,
+                bbox_inches='tight')
+    plt.close(fig)
     
     print("\nImágenes generadas exitosamente!")
     print(f"Las imágenes se encuentran en el directorio: {os.path.abspath(output_dir)}")

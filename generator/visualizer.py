@@ -414,24 +414,41 @@ def save_metrics_to_csv(cases_data, save_path):
     """
     records = []
     for case in cases_data:
+        # Calcular número de píxeles
+        num_pixeles = np.sum(case['field'])
+        
         record = {
-            'case_name': case['name'],
-            'beta0': case['metrics']['beta0'],
-            'beta1': case['metrics']['beta1'],
+            'imagen': case['name'],
+            'pixeles': num_pixeles,
             'vertices': case['metrics']['vertices'],
-            'edges': case['metrics']['edges'],
-            'faces': case['metrics']['faces'],
+            'aristas': case['metrics']['edges'],
+            'caras': case['metrics']['faces'],
+            'componentes': case['metrics']['beta0'],
+            'agujeros': case['metrics']['beta1'],
+            'codigo_f8': case['codes']['f8'],
+            'codigo_f4': case['codes']['f4'],
+            'codigo_vcc': case['codes']['vcc'],
+            'codigo_3ot': case['codes']['ot3'],
+            'N1': case['metrics']['vcc']['N1'],
+            'N3': case['metrics']['vcc']['N3'],
+            'N2h': case['metrics']['3ot']['N2h'],
+            'N2v': case['metrics']['3ot']['N2v'],
             'euler_vef': case['metrics']['euler_vef'],
             'euler_poincare': case['metrics']['euler_poincare'],
-            'is_consistent': case['metrics']['is_consistent'],
-            'area_fraction': case['metrics']['area_fraction'],
-            'perimeter': case['metrics']['perimeter']
+            'vcc_x': case['metrics']['vcc']['x'],
+            '3ot_x': case['metrics']['3ot']['combined']['X_value']
         }
         records.append(record)
     
+    # Crear DataFrame y guardar
     df = pd.DataFrame(records)
-    df.to_csv(save_path, index=False)
-    print(f"Métricas guardadas en: {save_path}")
+    
+    # Asegurar que el directorio existe
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    
+    # Guardar CSV
+    df.to_csv(save_path, index=False, encoding='utf-8')
+    print(f"\nMétricas guardadas en: {save_path}")
 
 def create_summary_report(cases_data, save_path):
     """
@@ -691,6 +708,15 @@ def plot_topology_patterns(codes, save_path, case_name=""):
     if case_name:
         plt.suptitle(f'Patrones Topológicos - {case_name}', 
                     fontsize=16, fontweight='bold', y=1.05)
+    
+    # Añadir información adicional
+    info_text = f"""
+    Longitud de códigos: {len(codes['vcc'])}
+    VCC: {codes['vcc']}
+    3OT: {codes['ot3']}
+    """
+    fig.text(0.02, 0.02, info_text, fontsize=10, 
+             bbox=dict(facecolor='white', edgecolor='black', alpha=0.8))
     
     # Guardar la figura
     plt.savefig(save_path, dpi=VISUALIZATION_CONFIG['dpi'], 
