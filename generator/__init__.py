@@ -14,16 +14,25 @@ from .field_generator import (
     create_vertical_dominant,
     create_asymmetric_mesh,
     create_asymmetric_spiral,
-    create_asymmetric_branches
+    create_asymmetric_branches,
+    add_noise_to_field
 )
 
 from .topology_metrics import (
-    compute_betti_numbers_2d,
+    count_vertices_edges_faces_corrected,
     euler_characteristic_2d,
     euler_poincare_2d,
     validate_euler_formulas,
     compute_all_metrics,
+    compute_perimeter,
     analyze_connectivity
+)
+
+from .topology_codes_extended import (
+    get_f8_code,
+    f8_to_f4,
+    compute_vcc,
+    compute_3ot
 )
 
 from .visualizer import (
@@ -32,12 +41,20 @@ from .visualizer import (
     plot_vector_field_enhanced,
     create_individual_case_visualization,
     save_metrics_to_csv,
-    create_summary_report
+    create_summary_report,
+    plot_topology_codes,
+    plot_topology_patterns
 )
 
 from .case_definitions import (
     get_topology_cases,
     validate_case_topology
+)
+
+from .image_reader import (
+    read_binary_image,
+    validate_binary_image,
+    preprocess_binary_image
 )
 
 __all__ = [
@@ -53,14 +70,22 @@ __all__ = [
     'create_asymmetric_mesh',
     'create_asymmetric_spiral',
     'create_asymmetric_branches',
+    'add_noise_to_field',
     
     # Topology metrics
-    'compute_betti_numbers_2d',
+    'count_vertices_edges_faces_corrected',
     'euler_characteristic_2d',
     'euler_poincare_2d',
     'validate_euler_formulas',
     'compute_all_metrics',
+    'compute_perimeter',
     'analyze_connectivity',
+    
+    # Topology codes
+    'get_f8_code',
+    'f8_to_f4',
+    'compute_vcc',
+    'compute_3ot',
     
     # Visualization
     'plot_topology_analysis',
@@ -69,11 +94,18 @@ __all__ = [
     'create_individual_case_visualization',
     'save_metrics_to_csv',
     'create_summary_report',
+    'plot_topology_codes',
+    'plot_topology_patterns',
     
     # Case definitions
     'get_topology_cases',
     'validate_case_topology',
     'create_blob',
     'create_hole',
-    'get_safe_positions'
+    'get_safe_positions',
+    
+    # Image reader
+    'read_binary_image',
+    'validate_binary_image',
+    'preprocess_binary_image'
 ]

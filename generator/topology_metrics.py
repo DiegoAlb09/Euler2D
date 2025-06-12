@@ -1,9 +1,9 @@
 import numpy as np
-from scipy.ndimage import label, binary_erosion, binary_dilation
+from scipy.ndimage import label, binary_erosion, binary_dilation, generate_binary_structure
 from skimage.morphology import skeletonize
 from skimage.measure import regionprops
 from .topology_base import compute_betti_numbers_2d
-from .topology_codes import compute_vcc, compute_3ot
+from .topology_codes_extended import compute_vcc, compute_3ot
 from .topology_codes_extended import get_f8_code, f8_to_f4
 
 def count_vertices_edges_faces_corrected(binary_image):

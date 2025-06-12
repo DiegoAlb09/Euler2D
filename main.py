@@ -13,10 +13,10 @@ from generator.visualizer import (plot_topology_analysis, create_comparison_plot
                                  create_individual_case_visualization, 
                                  save_metrics_to_csv, create_summary_report,
                                  plot_vector_field_enhanced, plot_topology_codes, plot_topology_patterns)
+from generator.topology_codes_extended import (get_f8_code, f8_to_f4, compute_vcc, compute_3ot,
+                                            normalize_code_length, verify_euler_equalities)
 from generator.case_definitions import get_topology_cases, validate_case_topology
 from generator.image_reader import read_binary_image, validate_binary_image, preprocess_binary_image
-from generator.topology_codes_extended import get_f8_code, f8_to_f4, normalize_code_length, verify_euler_equalities
-from generator.topology_codes import compute_vcc, compute_3ot
 from config.topology_config import IMAGE_CONFIG, VISUALIZATION_CONFIG
 
 def analyze_binary_image(image_path):
@@ -328,14 +328,42 @@ def main():
             image_path = os.path.abspath(os.path.normpath(image_path))
             print(f"Procesando imagen: {image_path}")
             
+            # Leer imagen y asegurar que sea binaria
+            binary_image = read_binary_image(image_path)
+            print("Imagen leída correctamente")
+            print(f"Dimensiones de la imagen: {binary_image.shape}")
+            
+            # Obtener todos los códigos
+            f8_code = get_f8_code(binary_image)
+            f4_code = f8_to_f4(f8_code)
             result = analyze_binary_image(image_path)
+            
+            # Mostrar información de los códigos
+            print("\nInformación de los códigos topológicos:")
+            print("-" * 40)
+            print(f"Código F8:")
+            print(f"  Longitud: {len(f8_code)} caracteres")
+            print(f"  Código: {f8_code}")
+            
+            print(f"\nCódigo F4:")
+            print(f"  Longitud: {len(f4_code)} caracteres")
+            print(f"  Código: {f4_code}")
+            
+            print(f"\nCódigo VCC:")
+            print(f"  Longitud: {len(result['codes']['vcc'])} caracteres")
+            print(f"  Código: {result['codes']['vcc']}")
+            
+            print(f"\nCódigo 3OT:")
+            print(f"  Longitud: {len(result['codes']['ot3'])} caracteres")
+            print(f"  Código: {result['codes']['ot3']}")
+            print("-" * 40)
             
             # Obtener nombre base para los archivos de salida
             base_name = os.path.splitext(os.path.basename(image_path))[0]
             
             # Guardar análisis general
             output_path = os.path.join(output_dir, f"{base_name}_analysis.png")
-            print(f"Guardando análisis general en: {output_path}")
+            print(f"\nGuardando análisis general en: {output_path}")
             plot_topology_analysis(
                 result['binary_image'],
                 result['vector_field'][0],
@@ -363,7 +391,7 @@ def main():
                 base_name
             )
             
-            print("Análisis completado exitosamente")
+            print("\nAnálisis completado exitosamente")
             
         except Exception as e:
             print(f"Error procesando imagen: {str(e)}")

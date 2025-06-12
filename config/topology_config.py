@@ -1,126 +1,28 @@
-# Configuración de parámetros para análisis topológico
+"""
+Configuración para el análisis topológico 2D
+"""
 
 # Configuración de imágenes
 IMAGE_CONFIG = {
-    'default_size': (256, 256),
-    'output_format': 'png',
-    'dpi': 150
+    'default_size': (256, 256),  # Tamaño por defecto para imágenes generadas
+    'min_size': (64, 64),       # Tamaño mínimo permitido
+    'max_size': (1024, 1024),   # Tamaño máximo permitido
+    'binary_threshold': 0.5,    # Umbral para binarización
 }
 
 # Configuración de visualización
 VISUALIZATION_CONFIG = {
-    'vector_field_step': 8,
-    'arrow_scale': 15,
-    'arrow_color': 'red',
-    'background_cmap': 'gray',
-    'figsize': (10, 8),
-    'dpi': 150
+    'dpi': 300,                 # DPI para guardar imágenes
+    'vector_field_step': 10,    # Paso para submuestreo del campo vectorial
+    'arrow_color': 'red',       # Color de las flechas del campo vectorial
+    'arrow_scale': 30,          # Escala de las flechas
 }
 
 # Configuración de topología
 TOPOLOGY_CONFIG = {
-    'blob_radius_range': (30, 50),
-    'hole_radius_range': (15, 25),
-    'min_distance_between_features': 40,
-    'smoothing_sigma': 2.0
-}
-
-# Casos de prueba predefinidos
-TOPOLOGY_CASES = {
-    'single_blob': {
-        'description': 'Un blob sin agujeros',
-        'expected_beta0': 1,
-        'expected_beta1': 0,
-        'expected_euler': 1
-    },
-    'blob_with_hole': {
-        'description': 'Un blob con un agujero',
-        'expected_beta0': 1,
-        'expected_beta1': 1,
-        'expected_euler': 0
-    },
-    'blob_with_three_holes': {
-        'description': 'Un blob con tres agujeros',
-        'expected_beta0': 1,
-        'expected_beta1': 3,
-        'expected_euler': -2
-    },
-    'two_blobs': {
-        'description': 'Dos blobs separados',
-        'expected_beta0': 2,
-        'expected_beta1': 0,
-        'expected_euler': 2
-    },
-    'two_blobs_one_hole': {
-        'description': 'Dos blobs, uno con agujero',
-        'expected_beta0': 2,
-        'expected_beta1': 1,
-        'expected_euler': 1
-    },
-    'complex_topology': {
-        'description': 'Topología compleja',
-        'expected_beta0': 3,
-        'expected_beta1': 2,
-        'expected_euler': 1
-    },
-    'irregular_star': {
-        'description': 'Forma de estrella irregular con agujeros',
-        'expected_beta0': 1,
-        'expected_beta1': 4,
-        'expected_euler': -3
-    },
-    'irregular_chain': {
-        'description': 'Cadena de blobs irregulares conectados',
-        'expected_beta0': 1,
-        'expected_beta1': 3,
-        'expected_euler': -2
-    },
-    'irregular_mesh': {
-        'description': 'Malla irregular con múltiples agujeros',
-        'expected_beta0': 1,
-        'expected_beta1': 6,
-        'expected_euler': -5
-    },
-    'irregular_clusters': {
-        'description': 'Clusters irregulares con conexiones',
-        'expected_beta0': 3,
-        'expected_beta1': 4,
-        'expected_euler': -1
-    },
-    'spiral_holes': {
-        'description': 'Espiral con agujeros distribuidos',
-        'expected_beta0': 1,
-        'expected_beta1': 5,
-        'expected_euler': -4
-    },
-    'horizontal_dominant': {
-        'description': 'Estructura con dominancia horizontal',
-        'expected_beta0': 1,
-        'expected_beta1': 0,
-        'expected_euler': 1
-    },
-    'vertical_dominant': {
-        'description': 'Estructura con dominancia vertical',
-        'expected_beta0': 1,
-        'expected_beta1': 0,
-        'expected_euler': 1
-    },
-    'asymmetric_mesh': {
-        'description': 'Malla asimétrica con más segmentos horizontales',
-        'expected_beta0': 1,
-        'expected_beta1': 4,
-        'expected_euler': -3
-    },
-    'asymmetric_spiral': {
-        'description': 'Espiral asimétrica con segmentos variables',
-        'expected_beta0': 1,
-        'expected_beta1': 0,
-        'expected_euler': 1
-    },
-    'asymmetric_branches': {
-        'description': 'Estructura ramificada asimétrica',
-        'expected_beta0': 1,
-        'expected_beta1': 0,
-        'expected_euler': 1
-    }
-}
+    'smoothing_sigma': 1.0,     # Sigma para suavizado gaussiano
+    'min_blob_radius': 10,      # Radio mínimo para blobs
+    'min_hole_radius': 5,       # Radio mínimo para agujeros
+    'min_distance': 20,         # Distancia mínima entre características
+    'noise_level': 0.05,        # Nivel de ruido por defecto
+} 
