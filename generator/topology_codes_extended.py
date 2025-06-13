@@ -103,6 +103,35 @@ def f8_to_f4(f8_code, metodo='filtrar'):
     # Unir los dígitos en una cadena
     return ''.join(codigo_f4)
 
+def compute_euler_from_freeman_chain(f8_code):
+    """
+    Calcula la característica de Euler usando rotaciones del código Freeman F8,
+    como se describe en el artículo.
+
+    Args:
+        f8_code (str): Código de contorno Freeman (cadena de números 0–7)
+
+    Returns:
+        float: Característica de Euler χ
+    """
+    if not f8_code or len(f8_code) < 2:
+        return 0.0
+
+    directions = [int(c) for c in f8_code]
+    total_rotation = 0
+
+    for i in range(1, len(directions)):
+        diff = (directions[i] - directions[i - 1]) % 8
+        if diff == 1 or diff == 2 or diff == 3:
+            total_rotation += 1
+        elif diff == 5 or diff == 6 or diff == 7:
+            total_rotation -= 1
+        elif diff == 4:
+            total_rotation += 0  # giro de 180° no cambia χ
+
+    return total_rotation / 4.0
+
+
 def normalize_code_length(vcc_code, ot3_code, target_length=None):
     """
     Normaliza la longitud de los códigos VCC y 3OT.
@@ -297,78 +326,25 @@ def vcc_to_3ot(vcc_code):
     
     return ot3
 
-def calcular_N2h_N2v(ot3):
+def calcular_N2h_N2v(ot3, ventana=5):
     """
-    Calcula N2h y N2v según patrones específicos de segmentos.
-    La diferencia (N2h-N2v)/4 debe ser igual a la característica de Euler χ.
-    
-    N2h: número de patrones horizontales dominantes
-    - Patrones donde la dirección horizontal es predominante
-    - Contribuye positivamente a χ cuando hay más estructura horizontal
-    
-    N2v: número de patrones verticales dominantes
-    - Patrones donde la dirección vertical es predominante
-    - Contribuye negativamente a χ cuando hay más estructura vertical
-    
-    Args:
-        ot3: Lista de direcciones (H, V, D)
-        
-    Returns:
-        tuple: (N2h, N2v) número de patrones horizontales y verticales dominantes
+    Calcula N2h y N2v como la cantidad de ventanas en las que hay predominancia
+    horizontal (H) o vertical (V) en secuencias de 5 direcciones.
     """
     N2h = 0
     N2v = 0
-    
-    # Convertir la lista a string para facilitar el análisis
-    ot3_str = ''.join(ot3)
-    
-    # Patrones horizontales dominantes
-    patrones_h = [
-        'HVH',    # Horizontal-Vertical-Horizontal básico
-        'HDH',    # Horizontal-Diagonal-Horizontal
-        'HHVH',   # Horizontal-Horizontal-Vertical-Horizontal
-        'HHDH',   # Horizontal-Horizontal-Diagonal-Horizontal
-        'HVHH',   # Horizontal-Vertical-Horizontal-Horizontal
-        'HDHH',   # Horizontal-Diagonal-Horizontal-Horizontal
-        'HVHVH',  # Patrón alternado horizontal
-        'HDHDH'   # Patrón alternado horizontal con diagonales
-    ]
-    
-    # Patrones verticales dominantes
-    patrones_v = [
-        'VHV',    # Vertical-Horizontal-Vertical básico
-        'VDV',    # Vertical-Diagonal-Vertical
-        'VVHV',   # Vertical-Vertical-Horizontal-Vertical
-        'VVDV',   # Vertical-Vertical-Diagonal-Vertical
-        'VHVV',   # Vertical-Horizontal-Vertical-Vertical
-        'VDVV',   # Vertical-Diagonal-Vertical-Vertical
-        'VHVHV',  # Patrón alternado vertical
-        'VDVDV'   # Patrón alternado vertical con diagonales
-    ]
-    
-    # Contar patrones horizontales
-    for patron in patrones_h:
-        count = ot3_str.count(patron)
-        if patron in ['HVHVH', 'HDHDH']:
-            # Ajustar para patrones alternados
-            N2h += count // 2
-        else:
-            N2h += count
-    
-    # Contar patrones verticales
-    for patron in patrones_v:
-        count = ot3_str.count(patron)
-        if patron in ['VHVHV', 'VDVDV']:
-            # Ajustar para patrones alternados
-            N2v += count // 2
-        else:
-            N2v += count
-    
-    # Ajustar por superposición de patrones
-    N2h = max(0, N2h - ot3_str.count('HVHVHVH'))  # Evitar contar dos veces patrones superpuestos
-    N2v = max(0, N2v - ot3_str.count('VHVHVHV'))
-    
+    for i in range(len(ot3) - ventana + 1):
+        ventana_actual = ot3[i:i + ventana]
+        h = ventana_actual.count('H')
+        v = ventana_actual.count('V')
+        
+        if h >= 3 and h > v:
+            N2h += 1
+        elif v >= 3 and v > h:
+            N2v += 1
+
     return N2h, N2v
+
 
 def compute_3ot(binary_image, vcc_code):
     """
@@ -447,6 +423,11 @@ def compute_3ot(binary_image, vcc_code):
         'is_consistent': abs(X - euler_poincare) < 1e-10,
         'difference': abs(X - euler_poincare)
     }
+    print("Código VCC:", vcc_code)
+    print("Código 3OT:", ''.join(ot3_list))
+    print("Direcciones únicas en 3OT:", set(ot3_list))
+    print("N2h:", N2h, "N2v:", N2v)
+
     
     return {
         'horizontal': horizontal_info,

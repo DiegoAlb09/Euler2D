@@ -67,7 +67,13 @@ def get_test_images():
         {"nombre": "Dos cuadrados", "figuras": [{"tipo": "cuadrado", "pos": (20, 20), "size": 20}, {"tipo": "cuadrado", "pos": (60, 60), "size": 20}]},
         {"nombre": "Dos círculos", "figuras": [{"tipo": "circulo", "pos": (30, 30), "radius": 15}, {"tipo": "circulo", "pos": (70, 70), "radius": 15}]},
         {"nombre": "Círculo y cuadrado", "figuras": [{"tipo": "cuadrado", "pos": (20, 20), "size": 20}, {"tipo": "circulo", "pos": (70, 70), "radius": 15}]},
-        {"nombre": "Círculo con hueco rectangular", "figuras": [{"tipo": "circulo", "pos": (50, 50), "radius": 30}, {"tipo": "cuadrado", "pos": (40, 40), "size": 20}]},
+        {"nombre": "Círculo con hueco rectangular", "figuras": [
+            {"tipo": "rect_hueco", "pos1": (20, 20), "pos2": (80, 80)},
+            {"tipo": "circulo", "pos": (30, 30), "radius": 10},
+            {"tipo": "circulo", "pos": (70, 30), "radius": 10},
+            {"tipo": "circulo", "pos": (30, 70), "radius": 10},
+            {"tipo": "circulo", "pos": (70, 70), "radius": 10}
+        ]},
         {"nombre": "3 círculos", "figuras": [{"tipo": "circulo", "pos": (20, 20), "radius": 10}, {"tipo": "circulo", "pos": (50, 50), "radius": 10}, {"tipo": "circulo", "pos": (80, 80), "radius": 10}]},
         {"nombre": "3 cuadrados", "figuras": [{"tipo": "cuadrado", "pos": (10, 10), "size": 15}, {"tipo": "cuadrado", "pos": (40, 40), "size": 15}, {"tipo": "cuadrado", "pos": (70, 70), "size": 15}]},
         {"nombre": "Dos donas", "figuras": [{"tipo": "dona", "pos": (30, 30), "r1": 15, "r2": 5}, {"tipo": "dona", "pos": (70, 70), "r1": 15, "r2": 5}]},

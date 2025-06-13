@@ -436,7 +436,8 @@ def save_metrics_to_csv(cases_data, save_path):
             'euler_vef': case['metrics']['euler_vef'],
             'euler_poincare': case['metrics']['euler_poincare'],
             'vcc_x': case['metrics']['vcc']['x'],
-            '3ot_x': case['metrics']['3ot']['combined']['X_value']
+            '3ot_x': case['metrics']['3ot']['combined']['X_value'],
+            'euler_freeman': case['metrics']['freeman_chain']['euler_from_chain_rotation']
         }
         records.append(record)
     
@@ -446,6 +447,16 @@ def save_metrics_to_csv(cases_data, save_path):
     # Asegurar que el directorio existe
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     
+    # Evitar exportación como notación científica: forzamos a string
+    df['codigo_f8'] = df['codigo_f8'].astype(str)
+    df['codigo_f4'] = df['codigo_f4'].astype(str)
+    df['codigo_vcc'] = df['codigo_vcc'].astype(str)
+    df['codigo_3ot'] = df['codigo_3ot'].astype(str)
+
+    # Alternativa rápida: proteger como texto para Excel
+    for col in ['codigo_f8', 'codigo_f4', 'codigo_vcc', 'codigo_3ot']:
+        df[col] = df[col].apply(lambda x: f'="{x}"')
+        
     # Guardar CSV
     df.to_csv(save_path, index=False, encoding='utf-8')
     print(f"\nMétricas guardadas en: {save_path}")

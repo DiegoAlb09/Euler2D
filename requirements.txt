@@ -1,0 +1,1 @@
+numpy>=1.21.0\nmatplotlib>=3.4.0\nopencv-python>=4.5.0\npandas>=1.3.0\nscipy>=1.7.0

@@ -13,7 +13,7 @@ from generator.visualizer import (plot_topology_analysis, create_comparison_plot
                                  create_individual_case_visualization, 
                                  save_metrics_to_csv, create_summary_report,
                                  plot_vector_field_enhanced, plot_topology_codes, plot_topology_patterns)
-from generator.topology_codes_extended import (get_f8_code, f8_to_f4, compute_vcc, compute_3ot,
+from generator.topology_codes_extended import (compute_euler_from_freeman_chain, get_f8_code, f8_to_f4, compute_vcc, compute_3ot,
                                             normalize_code_length, verify_euler_equalities)
 from generator.case_definitions import get_topology_cases, validate_case_topology
 from generator.image_reader import read_binary_image, validate_binary_image, preprocess_binary_image
@@ -69,6 +69,9 @@ def analyze_binary_image(image_path):
     # Generar códigos en secuencia F8 -> F4 -> VCC -> 3OT
     f8_code = get_f8_code(binary_image)
     f4_code = f8_to_f4(f8_code)
+
+    euler_freeman_rot = compute_euler_from_freeman_chain(f8_code)
+    metrics['freeman_chain'] = {'euler_from_chain_rotation': euler_freeman_rot}
     
     # Calcular VCC a partir de F4
     vcc_results = compute_vcc(binary_image, f4_code)
@@ -104,6 +107,8 @@ def analyze_binary_image(image_path):
     print(f"  F4: {f4_code}")
     print(f"  VCC: {vcc_code}")
     print(f"  3OT: {ot3_code}")
+    print(f"  Sumatoria de rotaciones locales: {euler_freeman_rot}")
+
     
     print("\nMétricas Principales:")
     print(f"  β₀ (Componentes) = {metrics['beta0']}")
@@ -164,9 +169,12 @@ def analyze_test_images():
         
         # Generar códigos
         f8_code = get_f8_code(imagen)
+        euler_freeman_rot = compute_euler_from_freeman_chain(f8_code)  # ← Primero lo calculás
         f4_code = f8_to_f4(f8_code)
         vcc_results = compute_vcc(imagen, f4_code)
         ot3_results = compute_3ot(imagen, vcc_results['code_string'])
+
+        metrics['freeman_chain'] = {'euler_from_chain_rotation': euler_freeman_rot}  # ← NUEVO
         
         # Verificar igualdades
         equalities = verify_euler_equalities(metrics)
@@ -214,6 +222,7 @@ def analyze_test_images():
         print(f"  χ = N - H = {metrics['euler_poincare']:.2f}")
         print(f"  χ = (N1 - N3)/4 = {metrics['vcc']['x']:.2f}")
         print(f"  χ = (N2h - N2v)/4 = {metrics['3ot']['combined']['X_value']:.2f}")
+        print(f"  χ = ΣR(i)/4 (Freeman Chain) = {euler_freeman_rot:.2f}")
         print("\nVerificación de igualdades:")
         for name, value in equalities['verificaciones'].items():
             print(f"  {name}: {'✓' if value else '✗'}")
