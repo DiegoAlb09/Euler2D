@@ -200,21 +200,37 @@ graph TD
 ### 4. Estadísticas Clave
 
 #### 4.1 Métricas de Precisión
+
+| Método   | Precisión (%) |
+|----------|---------------|
+| V-E+F    | 95.8          |
+| β₀-β₁    | 97.3          |
+| VCC      | 92.4          |
+| 3OT      | 94.1          |
+
 ```mermaid
-bar title Precisión por Método
-    V-E+F : 95.8
-    β₀-β₁ : 97.3
-    VCC : 92.4
-    3OT : 94.1
+pie title Precisión por Método
+    "V-E+F" : 95.8
+    "β₀-β₁" : 97.3
+    "VCC" : 92.4
+    "3OT" : 94.1
 ```
 
 #### 4.2 Tiempo de Procesamiento
+
+| Método   | Tiempo (ms) |
+|----------|-------------|
+| V-E+F    | 12.3        |
+| β₀-β₁    | 15.7        |
+| VCC      | 18.2        |
+| 3OT      | 22.5        |
+
 ```mermaid
-bar title Tiempo de Procesamiento (ms)
-    V-E+F : 12.3
-    β₀-β₁ : 15.7
-    VCC : 18.2
-    3OT : 22.5
+pie title Tiempo de Procesamiento (ms)
+    "V-E+F" : 12.3
+    "β₀-β₁" : 15.7
+    "VCC" : 18.2
+    "3OT" : 22.5
 ```
 
 ### 5. Análisis de Robustez
