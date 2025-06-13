@@ -15,7 +15,7 @@ Este sistema realiza análisis topológico avanzado de imágenes binarias 2D, ca
 
 1. Clonar el repositorio:
 ```bash
-git clone https://github.com/tu-usuario/Euler2D.git
+git clone https://github.com/DiegoAlb09/Euler2D.git
 cd Euler2D
 ```
 
@@ -34,19 +34,9 @@ pip install -r requirements.txt
 
 ### Análisis de Imágenes
 
-1. Análisis de imagen individual:
+1. Análisis de imagenes:
 ```bash
-python main.py ruta/a/tu/imagen.png
-```
-
-2. Generación y análisis de casos predefinidos:
-```bash
-python main.py --generate-cases
-```
-
-3. Análisis con visualización detallada:
-```bash
-python main.py ruta/imagen.png --visualize
+python main.py
 ```
 
 ### Ejemplos de Código
